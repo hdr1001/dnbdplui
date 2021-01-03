@@ -33,7 +33,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
          //In this applicaton only the 1st file in the array is relevant
          if(event.target.files[0]) {
-            window.alert('File selected is ' + event.target.files[0].name);
+            console.log('File selected is ' + event.target.files[0].name);
+
+            const fileReader = new FileReader();
+            
+            //On load event for reading the file
+            fileReader.addEventListener('load', event => {
+               let oDBs;
+
+               //Parse the text read
+               try {
+                  oDBs = JSON.parse(event.target.result);
+               }
+               catch(err) {
+                  console.log(err.message); return;
+               }
+
+               //Check for the organization property
+               if(oDBs.organization) {
+                  window.alert('DUNS ' + oDBs.organization.duns + ' ➡️ ' + oDBs.organization.primaryName);
+               }
+               else {
+                  console.log('JSON successfully parsed but no organization property');
+                  return;
+               }
+            });
+
+            //Read the local file specified by the user as text
+            fileReader.readAsText(event.target.files[0], 'utf-8');
          }
          else {
             console.log('Invalid file selected');
