@@ -49,13 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
                   console.log(err.message); return;
                }
 
-               //Check for the organization property
-               if(oDBs.organization) {
-                  window.alert('DUNS ' + oDBs.organization.duns + ' ➡️ ' + oDBs.organization.primaryName);
+               //The data block info will be appended to the div dnbDplDBs
+               const divDBs = document.getElementById('dnbDplDBs');
+
+               if(divDBs) {
+                  const docFrag = getDBsDocFrag(oDBs);
+
+                  //Append the document fragment if successfully created
+                  if(docFrag) { divDBs.appendChild(docFrag) }
                }
                else {
-                  console.log('JSON successfully parsed but no organization property');
-                  return;
+                  console.log('getElementById dnbDplDBs failed');
                }
             });
 
