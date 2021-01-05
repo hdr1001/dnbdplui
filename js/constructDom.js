@@ -22,6 +22,31 @@
 
 //Create a document fragement based on the D&B Direct+ Data Block passed in
 function getDBsDocFrag(oDBs) {
+   //Create a table for displaying basic data block data
+   function getBasicDBsTbl(title) {
+      let tbl = document.createElement('table');
+      const thead = tbl.appendChild(document.createElement('thead'));
+      const tr = thead.appendChild(document.createElement('tr'));
+      const th = tr.appendChild(document.createElement('th'));
+
+      th.appendChild(document.createTextNode(title));
+      th.setAttribute('colspan', 2)
+
+      return tbl;
+   }
+
+   function addBasicDBsTblRow(tbody, rowLabel, rowContent) {
+      if(!rowContent) { return }
+
+      let tr = tbody.appendChild(document.createElement('tr'));
+
+      let td = tr.appendChild(document.createElement('td'));
+      td.appendChild(document.createTextNode(rowLabel));
+
+      td = tr.appendChild(document.createElement('td'));
+      td.appendChild(document.createTextNode(rowContent ? rowContent : ''));
+   }
+
    const org = oDBs.organization;
 
    //Escape if no organization property is available in the data block object
@@ -39,22 +64,22 @@ function getDBsDocFrag(oDBs) {
    }
 
    //All systems go ➡️ let's create a document fragment based on the data block info
-   let tbl = document.createElement('table');
-   let tr = tbl.appendChild(document.createElement('tr'));
 
-   let td = tr.appendChild(document.createElement('td'));
-   td.appendChild(document.createTextNode('DUNS: '))
+   //Add the Direct+ request details to the page
+   let tbl = getBasicDBsTbl('Inquiry details');
+   let tbody = tbl.appendChild(document.createElement('tbody'));
+   addBasicDBsTblRow(tbody, 'DUNS', oDBs.inquiryDetail.duns);
+   addBasicDBsTblRow(tbody, 'Data blocks', oDBs.inquiryDetail.blockIDs[0]);
+   addBasicDBsTblRow(tbody, 'Trade up', oDBs.inquiryDetail.tradeUp);
+   addBasicDBsTblRow(tbody, 'Reference', oDBs.inquiryDetail.customerReference);
 
-   td = tr.appendChild(document.createElement('td'));
-   td.appendChild(document.createTextNode(org.duns ? org.duns : ''));
+   retDocFrag.appendChild(tbl);
 
-   tr = tbl.appendChild(document.createElement('tr'));
-
-   td = tr.appendChild(document.createElement('td'));
-   td.appendChild(document.createTextNode('Primary name: '))
-
-   td = tr.appendChild(document.createElement('td'));
-   td.appendChild(document.createTextNode(org.primaryName ? org.primaryName : ''));
+   //Add the DUNS and the primary name to the page
+   tbl = getBasicDBsTbl('DUNS & Name');
+   tbody = tbl.appendChild(document.createElement('tbody'));
+   addBasicDBsTblRow(tbody, 'DUNS', org.duns);
+   addBasicDBsTblRow(tbody, 'Primary name', org.primaryName);
 
    retDocFrag.appendChild(tbl);
 
