@@ -35,16 +35,39 @@ function getDBsDocFrag(oDBs) {
       return tbl;
    }
 
+   //Add a row (or rows) to a basic data block data table
    function addBasicDBsTblRow(tbody, rowLabel, rowContent) {
-      if(!rowContent) { return }
+      const bContentIsArray = Array.isArray(content);
+
+      //Skip if no content available or empty array
+      if(!rowContent || (bContentIsArray && rowContent.length === 0)) {
+         console.log('No content available for ' + rowLabel); return;
+      }
 
       let tr = tbody.appendChild(document.createElement('tr'));
 
       let td = tr.appendChild(document.createElement('td'));
       td.appendChild(document.createTextNode(rowLabel));
 
-      td = tr.appendChild(document.createElement('td'));
-      td.appendChild(document.createTextNode(rowContent ? rowContent : ''));
+      if(bContentIsArray) { //Multiple values
+         let tdMultRow;
+
+         rowContent.forEach((arrElem, idx) => {
+            let tdMultRow;
+
+            if(idx > 0) {
+               tr = tbody.appendChild(document.createElement('tr'));
+               td.setAttribute('rowspan', idx + 1);
+            }
+
+            tdMultRow = tr.appendChild(document.createElement('td'));
+            tdMultRow.appendChild(document.createTextNode(arrElem));
+         });
+      }
+      else { //Single value
+         td = tr.appendChild(document.createElement('td'));
+         td.appendChild(document.createTextNode(rowContent ? rowContent : ''));
+      }
    }
 
    const org = oDBs.organization;
@@ -65,11 +88,20 @@ function getDBsDocFrag(oDBs) {
 
    //All systems go ➡️ let's create a document fragment based on the data block info
 
+   //Check section availability
+   let bAddContactAt = false;
+   if(( org.websiteAddress && org.websiteAddress.length > 0) || 
+         (org.email && org.email.length > 0)) {
+
+      console.log('Contact information available');
+      bAddContactAt = true;
+   }
+
    //Add the Direct+ request details to the page
    let tbl = getBasicDBsTbl('Inquiry details');
    let tbody = tbl.appendChild(document.createElement('tbody'));
    addBasicDBsTblRow(tbody, 'DUNS', oDBs.inquiryDetail.duns);
-   addBasicDBsTblRow(tbody, 'Data blocks', oDBs.inquiryDetail.blockIDs[0]);
+   addBasicDBsTblRow(tbody, 'Data blocks', oDBs.inquiryDetail.blockIDs);
    addBasicDBsTblRow(tbody, 'Trade up', oDBs.inquiryDetail.tradeUp);
    addBasicDBsTblRow(tbody, 'Reference', oDBs.inquiryDetail.customerReference);
 
@@ -82,6 +114,16 @@ function getDBsDocFrag(oDBs) {
    addBasicDBsTblRow(tbody, 'Primary name', org.primaryName);
 
    retDocFrag.appendChild(tbl);
+
+   //Add contact information to the page
+   if(bAddContactAt) {
+      tbl = getBasicDBsTbl('Contact @');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+      if(org.websiteAddress) {addBasicDBsTblRow(tbody, 'Website', org.websiteAddress.map(oURL => oURL.url))}
+      if(org.email) {addBasicDBsTblRow(tbody, 'e-mail', org.email.map(oEmail => oEmail.address))}
+
+      retDocFrag.appendChild(tbl);
+   }
 
    return retDocFrag;
 }
