@@ -37,7 +37,7 @@ function getDBsDocFrag(oDBs) {
 
    //Add a row (or rows) to a basic data block data table
    function addBasicDBsTblRow(tbody, rowLabel, rowContent) {
-      const bContentIsArray = Array.isArray(content);
+      const bContentIsArray = Array.isArray(rowContent);
 
       //Skip if no content available or empty array
       if(!rowContent || (bContentIsArray && rowContent.length === 0)) {
@@ -89,8 +89,18 @@ function getDBsDocFrag(oDBs) {
    //All systems go ➡️ let's create a document fragment based on the data block info
 
    //Check section availability
+   let bNameAddr = false;
+   if(org.primaryName || 
+         (org.tradeStyleNames && org.tradeStyleNames.length > 0) ||
+         (org.primaryAddress && org.primaryAddress.language)) {
+
+      console.log('Name & address information available');
+      bNameAddr = true;
+   }
+
    let bAddContactAt = false;
-   if(( org.websiteAddress && org.websiteAddress.length > 0) || 
+   if((org.telephone && org.telephone.length > 0 && org.telephone[0].telephoneNumber) ||
+         (org.websiteAddress && org.websiteAddress.length > 0) || 
          (org.email && org.email.length > 0)) {
 
       console.log('Contact information available');
@@ -108,17 +118,27 @@ function getDBsDocFrag(oDBs) {
    retDocFrag.appendChild(tbl);
 
    //Add the DUNS and the primary name to the page
-   tbl = getBasicDBsTbl('DUNS & Name');
-   tbody = tbl.appendChild(document.createElement('tbody'));
-   addBasicDBsTblRow(tbody, 'DUNS', org.duns);
-   addBasicDBsTblRow(tbody, 'Primary name', org.primaryName);
+   if(bNameAddr) {
+      tbl = getBasicDBsTbl('Name & address');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+      if(org.primaryName) {addBasicDBsTblRow(tbody, 'Primary name', org.primaryName)}
+      if(org.tradeStyleNames && org.tradeStyleNames.length > 0) {
+         addBasicDBsTblRow(tbody, 'Tradestyle(s)', org.tradeStyleNames.map(oTS => oTS.name))
+      }
+      if(org.primaryAddress && org.primaryAddress.language) {
+         addBasicDBsTblRow(tbody, 'Primary address', getCiAddr(org.primaryAddress))
+      }
 
-   retDocFrag.appendChild(tbl);
+      retDocFrag.appendChild(tbl);
+   }
 
    //Add contact information to the page
    if(bAddContactAt) {
       tbl = getBasicDBsTbl('Contact @');
       tbody = tbl.appendChild(document.createElement('tbody'));
+      if(org.telephone && org.telephone.length > 0 && org.telephone[0].telephoneNumber) {
+         addBasicDBsTblRow(tbody, 'Telephone', org.telephone.map(oTel => getCiTel(oTel)))
+      }
       if(org.websiteAddress) {addBasicDBsTblRow(tbody, 'Website', org.websiteAddress.map(oURL => oURL.url))}
       if(org.email) {addBasicDBsTblRow(tbody, 'e-mail', org.email.map(oEmail => oEmail.address))}
 
