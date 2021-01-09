@@ -1,0 +1,40 @@
+body {
+   font-family: "Open Sans", Verdana, Tahoma, Arial, sans-serif;
+}
+
+table.dnbDplDBsSection {
+   border-collapse: collapse;
+   margin: 25px 0;
+   min-width: 400px;
+   box-shadow: 0 0 20px 1px rgba(0, 0, 0, .2);
+}
+
+table.dnbDplDBsSection caption {
+   background-color: #009ECE;
+   color: #fff;
+   text-align: center;
+   font-weight: bold;
+   height: 40px;
+   line-height: 38px;
+   border-radius: 5px 5px 0 0;
+   overflow: hidden;
+}
+
+table.dnbDplDBsSection tbody {
+   border-bottom: 2px solid #009ECE;
+}
+
+table.dnbDplDBsSection tbody tr.bottomRow {
+   border-bottom: 1px solid #dddddd;
+}
+
+table.dnbDplDBsSection tbody tr th {
+   text-align: left;
+   font-weight: normal;
+   font-style: italic;
+   padding-left: 8px;
+}
+
+table.dnbDplDBsSection tbody tr td {
+   padding: 4px 10px;
+}

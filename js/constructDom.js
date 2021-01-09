@@ -24,13 +24,11 @@
 function getDBsDocFrag(oDBs) {
    //Create a table for displaying basic data block data
    function getBasicDBsTbl(title) {
-      let tbl = document.createElement('table');
-      const thead = tbl.appendChild(document.createElement('thead'));
-      const tr = thead.appendChild(document.createElement('tr'));
-      const th = tr.appendChild(document.createElement('th'));
+      const tbl = document.createElement('table');
+      tbl.setAttribute('class', 'dnbDplDBsSection')
 
-      th.appendChild(document.createTextNode(title));
-      th.setAttribute('colspan', 2)
+      const tblCapt = tbl.appendChild(document.createElement('caption'));
+      tblCapt.appendChild(document.createTextNode(title));
 
       return tbl;
    }
@@ -46,8 +44,8 @@ function getDBsDocFrag(oDBs) {
 
       let tr = tbody.appendChild(document.createElement('tr'));
 
-      let td = tr.appendChild(document.createElement('td'));
-      td.appendChild(document.createTextNode(rowLabel));
+      let td, th = tr.appendChild(document.createElement('th'));
+      th.appendChild(document.createTextNode(rowLabel));
 
       if(bContentIsArray) { //Multiple values
          let tdMultRow;
@@ -57,7 +55,7 @@ function getDBsDocFrag(oDBs) {
 
             if(idx > 0) {
                tr = tbody.appendChild(document.createElement('tr'));
-               td.setAttribute('rowspan', idx + 1);
+               th.setAttribute('rowspan', idx + 1);
             }
 
             tdMultRow = tr.appendChild(document.createElement('td'));
@@ -68,6 +66,8 @@ function getDBsDocFrag(oDBs) {
          td = tr.appendChild(document.createElement('td'));
          td.appendChild(document.createTextNode(rowContent ? rowContent : ''));
       }
+
+      tr.setAttribute('class', 'bottomRow');
    }
 
    const org = oDBs.organization;
