@@ -65,3 +65,16 @@ function getCiAddr(oAddr) {
 function getCiTel(oTel) {
    return (oTel.isdCode ? '+' + oTel.isdCode + ' ' : '') + oTel.telephoneNumber
 }
+
+//Remove the country code from a description
+function getDescNoCountryCode(sDesc) {
+   let idx = sDesc.indexOf('(');
+
+   if(idx > -1) {
+      if(sDesc.substr(idx + 3, 1) == ')') { //Just checking :-)
+         sDesc = sDesc.substr(0, idx - 1);
+      }
+   }
+
+   return sDesc.trim();
+}

@@ -89,13 +89,19 @@ function getDBsDocFrag(oDBs) {
    //All systems go ➡️ let's create a document fragment based on the data block info
 
    //Check section availability
-   let bNameAddr = false;
-   if(org.primaryName || 
+   let bGeneral = false;
+   if(org.duns || org.primaryName || 
          (org.tradeStyleNames && org.tradeStyleNames.length > 0) ||
-         (org.primaryAddress && org.primaryAddress.language)) {
+         (org.dunsControlStatus && org.dunsControlStatus.operatingStatus && org.dunsControlStatus.operatingStatus.code)) {
 
-      console.log('Name & address information available');
-      bNameAddr = true;
+      console.log('General information available');
+      bGeneral = true;
+   }
+
+   let bAddr = false;
+   if(org.primaryAddress && org.primaryAddress.language) {
+      console.log('Address information available');
+      bAddr = true;
    }
 
    let bAddContactAt = false;
@@ -105,6 +111,30 @@ function getDBsDocFrag(oDBs) {
 
       console.log('Contact information available');
       bAddContactAt = true;
+   }
+
+   let bRegIDs = false;
+   if(org.registrationNumbers && org.registrationNumbers.length > 0) {
+      console.log('Registration numbers available');
+      bRegIDs = true;
+   }
+
+   let bActs = false;
+   if(org.activities && org.activities.length > 0) {
+      console.log('Activity/activities available');
+      bActs = true;
+   }
+
+   let bSIC = false;
+   if(org.primaryIndustryCode && org.primaryIndustryCode.usSicV4) {
+      console.log('Primary SIC activity code available');
+      bSIC = true;
+   }
+
+   let bStockExch = false;
+   if(org.stockExchanges && org.stockExchanges.length > 0) {
+      console.log('Company is a listed company');
+      bStockExch = true;
    }
 
    //Add the Direct+ request details to the page
@@ -117,14 +147,26 @@ function getDBsDocFrag(oDBs) {
 
    retDocFrag.appendChild(tbl);
 
-   //Add the DUNS and the primary name to the page
-   if(bNameAddr) {
-      tbl = getBasicDBsTbl('Name & address');
+   //Add miscellaneous information to the page
+   if(bGeneral) {
+      tbl = getBasicDBsTbl('General');
       tbody = tbl.appendChild(document.createElement('tbody'));
+      if(org.duns) {addBasicDBsTblRow(tbody, 'DUNS', org.duns)}
       if(org.primaryName) {addBasicDBsTblRow(tbody, 'Primary name', org.primaryName)}
       if(org.tradeStyleNames && org.tradeStyleNames.length > 0) {
          addBasicDBsTblRow(tbody, 'Tradestyle(s)', org.tradeStyleNames.map(oTS => oTS.name))
       }
+      if(org.dunsControlStatus && org.dunsControlStatus.operatingStatus && org.dunsControlStatus.operatingStatus.description) {
+         addBasicDBsTblRow(tbody, 'Operating status', org.dunsControlStatus.operatingStatus.description)
+      }
+
+      retDocFrag.appendChild(tbl);
+   }
+
+   //Add the DUNS and the primary name to the page
+   if(bAddr) {
+      tbl = getBasicDBsTbl('Address');
+      tbody = tbl.appendChild(document.createElement('tbody'));
       if(org.primaryAddress && org.primaryAddress.language) {
          addBasicDBsTblRow(tbody, 'Primary address', getCiAddr(org.primaryAddress))
       }
@@ -142,6 +184,52 @@ function getDBsDocFrag(oDBs) {
       if(org.websiteAddress) {addBasicDBsTblRow(tbody, 'Website', org.websiteAddress.map(oURL => oURL.url))}
       if(org.email) {addBasicDBsTblRow(tbody, 'e-mail', org.email.map(oEmail => oEmail.address))}
 
+      retDocFrag.appendChild(tbl);
+   }
+
+   //Add registration number(s) to the page
+   if(bRegIDs) {
+      tbl = getBasicDBsTbl('Registration number(s)');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+      if(org.registrationNumbers && org.registrationNumbers.length > 0) {
+         org.registrationNumbers.forEach(oRegNum => {
+            addBasicDBsTblRow(tbody, getDescNoCountryCode(oRegNum.typeDescription), oRegNum.registrationNumber)
+         })
+      }
+
+      retDocFrag.appendChild(tbl);
+   }
+
+   //Add listed activities to the page
+   if(bActs) {
+      tbl = getBasicDBsTbl('Business operations');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+      if(org.activities && org.activities.length > 0) {
+         org.activities.forEach(oAct => {
+            addBasicDBsTblRow(tbody, oAct.language.description, oAct.description)
+         })
+      }
+
+      retDocFrag.appendChild(tbl);
+   }
+
+   if(bSIC) {
+      tbl = getBasicDBsTbl('Primary (SIC) activity code');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+      if(org.primaryIndustryCode && org.primaryIndustryCode.usSicV4) {
+         addBasicDBsTblRow(tbody, org.primaryIndustryCode.usSicV4, org.primaryIndustryCode.usSicV4Description)
+      }
+
+      retDocFrag.appendChild(tbl);
+   }
+
+   if(bStockExch) {
+      tbl = getBasicDBsTbl('Stock exchange(s)');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+      if(org.stockExchanges && org.stockExchanges.length > 0) {
+         addBasicDBsTblRow(tbody, 'Stock exchanges', org.stockExchanges.map(oStkExch => oStkExch.tickerName))
+      }
+      
       retDocFrag.appendChild(tbl);
    }
 
