@@ -20,6 +20,11 @@
 //
 // *********************************************************************
 
+//Check if an object is an empty object
+function bObjIsEmpty(obj) {
+   return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
 //Company Info address object conversion
 function getCiAddr(oAddr) {
    let arrAddr = [], str = '';

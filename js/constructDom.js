@@ -88,53 +88,36 @@ function getDBsDocFrag(oDBs) {
 
    //All systems go ➡️ let's create a document fragment based on the data block info
 
-   //Check section availability
-   let bGeneral = false;
-   if(org.duns || org.primaryName || 
-         (org.tradeStyleNames && org.tradeStyleNames.length > 0) ||
-         (org.dunsControlStatus && org.dunsControlStatus.operatingStatus && org.dunsControlStatus.operatingStatus.code)) {
+   //First check actual data availability
+   let dataAvailability = {};
 
-      console.log('General information available');
-      bGeneral = true;
-   }
+   org.duns ? dataAvailability.duns = true : dataAvailability.duns = false;
+   org.primaryName ? dataAvailability.primaryName = true : dataAvailability.primaryName = false;
 
-   let bAddr = false;
-   if(org.primaryAddress && org.primaryAddress.language) {
-      console.log('Address information available');
-      bAddr = true;
-   }
+   dataAvailability.tradeStyleNames = org.tradeStyleNames && org.tradeStyleNames.length > 0;
 
-   let bAddContactAt = false;
-   if((org.telephone && org.telephone.length > 0 && org.telephone[0].telephoneNumber) ||
-         (org.websiteAddress && org.websiteAddress.length > 0) || 
-         (org.email && org.email.length > 0)) {
+   dataAvailability.dunsControlStatus = org.dunsControlStatus && !bObjIsEmpty(org.dunsControlStatus);
+   dataAvailability.operatingStatus = dataAvailability.dunsControlStatus && org.dunsControlStatus.operatingStatus
+                                          && !bObjIsEmpty(org.dunsControlStatus.operatingStatus);
 
-      console.log('Contact information available');
-      bAddContactAt = true;
-   }
+   dataAvailability.primaryAddress = org.primaryAddress && !bObjIsEmpty(org.primaryAddress);
 
-   let bRegIDs = false;
-   if(org.registrationNumbers && org.registrationNumbers.length > 0) {
-      console.log('Registration numbers available');
-      bRegIDs = true;
-   }
+   dataAvailability.telephone = org.telephone && org.telephone.length > 0;
 
-   let bActs = false;
-   if(org.activities && org.activities.length > 0) {
-      console.log('Activity/activities available');
-      bActs = true;
-   }
+   dataAvailability.websiteAddress = org.websiteAddress && org.websiteAddress.length > 0;
 
-   let bSIC = false;
-   if(org.primaryIndustryCode && org.primaryIndustryCode.usSicV4) {
-      console.log('Primary SIC activity code available');
-      bSIC = true;
-   }
+   dataAvailability.email = org.email && org.email.length > 0;
 
-   let bStockExch = false;
-   if(org.stockExchanges && org.stockExchanges.length > 0) {
-      console.log('Company is a listed company');
-      bStockExch = true;
+   dataAvailability.registrationNumbers = org.registrationNumbers && org.registrationNumbers.length > 0;
+
+   dataAvailability.activities = org.activities && org.activities.length > 0;
+
+   dataAvailability.primaryIndustryCode = org.primaryIndustryCode && !bObjIsEmpty(org.primaryIndustryCode);
+
+   dataAvailability.stockExchanges = org.stockExchanges && org.stockExchanges.length > 0;
+
+   dataAvailability.checkAvailabilityOneOf = function(arr) {
+      return arr.some(elem => this[elem]);
    }
 
    //Add the Direct+ request details to the page
@@ -147,90 +130,115 @@ function getDBsDocFrag(oDBs) {
 
    retDocFrag.appendChild(tbl);
 
-   //Add miscellaneous information to the page
-   if(bGeneral) {
+   //Add high level DUNS information to the page
+   if(dataAvailability.checkAvailabilityOneOf(['duns', 'primaryName', 'tradeStyleNames', 'operatingStatus'])) {
+      console.log('Section \"General\" will be created');
+
       tbl = getBasicDBsTbl('General');
       tbody = tbl.appendChild(document.createElement('tbody'));
-      if(org.duns) {addBasicDBsTblRow(tbody, 'DUNS', org.duns)}
-      if(org.primaryName) {addBasicDBsTblRow(tbody, 'Primary name', org.primaryName)}
-      if(org.tradeStyleNames && org.tradeStyleNames.length > 0) {
+      if(dataAvailability.duns) {addBasicDBsTblRow(tbody, 'DUNS', org.duns)}
+      if(dataAvailability.primaryName) {addBasicDBsTblRow(tbody, 'Primary name', org.primaryName)}
+      if(dataAvailability.tradeStyleNames) {
          addBasicDBsTblRow(tbody, 'Tradestyle(s)', org.tradeStyleNames.map(oTS => oTS.name))
       }
-      if(org.dunsControlStatus && org.dunsControlStatus.operatingStatus && org.dunsControlStatus.operatingStatus.description) {
+      if(dataAvailability.operatingStatus) {
          addBasicDBsTblRow(tbody, 'Operating status', org.dunsControlStatus.operatingStatus.description)
       }
 
       retDocFrag.appendChild(tbl);
    }
+   else {
+      console.log('No data available for section \"General\", it will not be created');
+   }
 
-   //Add the DUNS and the primary name to the page
-   if(bAddr) {
+   //Add address information to the page
+   if(dataAvailability.primaryAddress) {
+      console.log('Section \"Address\" will be created');
+
       tbl = getBasicDBsTbl('Address');
       tbody = tbl.appendChild(document.createElement('tbody'));
-      if(org.primaryAddress && org.primaryAddress.language) {
-         addBasicDBsTblRow(tbody, 'Primary address', getCiAddr(org.primaryAddress))
-      }
+      addBasicDBsTblRow(tbody, 'Primary address', getCiAddr(org.primaryAddress));
 
       retDocFrag.appendChild(tbl);
+   }
+   else {
+      console.log('No data available for section \"Address\", it will not be created');
    }
 
    //Add contact information to the page
-   if(bAddContactAt) {
+   if(dataAvailability.checkAvailabilityOneOf(['telephone', 'websiteAddress', 'email'])) {
+      console.log('Section \"Contact @\" will be created');
+
       tbl = getBasicDBsTbl('Contact @');
       tbody = tbl.appendChild(document.createElement('tbody'));
-      if(org.telephone && org.telephone.length > 0 && org.telephone[0].telephoneNumber) {
+      if(dataAvailability.telephone) {
          addBasicDBsTblRow(tbody, 'Telephone', org.telephone.map(oTel => getCiTel(oTel)))
       }
-      if(org.websiteAddress) {addBasicDBsTblRow(tbody, 'Website', org.websiteAddress.map(oURL => oURL.url))}
-      if(org.email) {addBasicDBsTblRow(tbody, 'e-mail', org.email.map(oEmail => oEmail.address))}
+      if(dataAvailability.websiteAddress) {addBasicDBsTblRow(tbody, 'Website', org.websiteAddress.map(oURL => oURL.url))}
+      if(dataAvailability.email) {addBasicDBsTblRow(tbody, 'e-mail', org.email.map(oEmail => oEmail.address))}
 
       retDocFrag.appendChild(tbl);
+   }
+   else {
+      console.log('No data available for section \"Contact @\", it will not be created');
    }
 
    //Add registration number(s) to the page
-   if(bRegIDs) {
+   if(dataAvailability.registrationNumbers) {
+      console.log('Section \"Registration number(s)\" will be created');
+
       tbl = getBasicDBsTbl('Registration number(s)');
       tbody = tbl.appendChild(document.createElement('tbody'));
-      if(org.registrationNumbers && org.registrationNumbers.length > 0) {
-         org.registrationNumbers.forEach(oRegNum => {
-            addBasicDBsTblRow(tbody, getDescNoCountryCode(oRegNum.typeDescription), oRegNum.registrationNumber)
-         })
-      }
+      org.registrationNumbers.forEach(oRegNum => {
+         addBasicDBsTblRow(tbody, getDescNoCountryCode(oRegNum.typeDescription), oRegNum.registrationNumber)
+      });
 
       retDocFrag.appendChild(tbl);
+   }
+   else {
+      console.log('No data available for section \"Registration number(s)\", it will not be created');
    }
 
    //Add listed activities to the page
-   if(bActs) {
+   if(dataAvailability.activities) {
+      console.log('Section \"Business operations\" will be created');
+
       tbl = getBasicDBsTbl('Business operations');
       tbody = tbl.appendChild(document.createElement('tbody'));
-      if(org.activities && org.activities.length > 0) {
-         org.activities.forEach(oAct => {
-            addBasicDBsTblRow(tbody, oAct.language.description, oAct.description)
-         })
-      }
+      org.activities.forEach(oAct => {
+         addBasicDBsTblRow(tbody, oAct.language.description, oAct.description)
+      })
 
       retDocFrag.appendChild(tbl);
    }
+   else {
+      console.log('No data available for section \"Business operations\", it will not be created');
+   }
 
-   if(bSIC) {
+   if(dataAvailability.primaryIndustryCode) {
+      console.log('Section \"Primary (SIC) activity code\" will be created');
+
       tbl = getBasicDBsTbl('Primary (SIC) activity code');
       tbody = tbl.appendChild(document.createElement('tbody'));
-      if(org.primaryIndustryCode && org.primaryIndustryCode.usSicV4) {
-         addBasicDBsTblRow(tbody, org.primaryIndustryCode.usSicV4, org.primaryIndustryCode.usSicV4Description)
-      }
+      addBasicDBsTblRow(tbody, org.primaryIndustryCode.usSicV4, org.primaryIndustryCode.usSicV4Description)
 
       retDocFrag.appendChild(tbl);
    }
+   else {
+      console.log('No data available for section \"Primary (SIC) activity code\", it will not be created');
+   }
 
-   if(bStockExch) {
+   if(dataAvailability.stockExchanges) {
+      console.log('Section \"Stock exchange(s)\" will be created');
+
       tbl = getBasicDBsTbl('Stock exchange(s)');
       tbody = tbl.appendChild(document.createElement('tbody'));
-      if(org.stockExchanges && org.stockExchanges.length > 0) {
-         addBasicDBsTblRow(tbody, 'Stock exchanges', org.stockExchanges.map(oStkExch => oStkExch.tickerName))
-      }
+      addBasicDBsTblRow(tbody, 'Stock exchanges', org.stockExchanges.map(oStkExch => oStkExch.tickerName))
       
       retDocFrag.appendChild(tbl);
+   }
+   else {
+      console.log('No data available for section \"Stock exchange(s)\", it will not be created');
    }
 
    return retDocFrag;
