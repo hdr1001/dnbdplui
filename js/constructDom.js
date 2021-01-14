@@ -116,9 +116,18 @@ function getDBsDocFrag(oDBs) {
 
    dataAvailability.stockExchanges = org.stockExchanges && org.stockExchanges.length > 0;
 
-   dataAvailability.checkAvailabilityOneOf = function(arr) {
-      return arr.some(elem => this[elem]);
-   }
+   //Log the data availability
+   console.log('\nAvailable data');
+   Object.keys(dataAvailability)
+      .filter(sKey => dataAvailability[sKey])
+      .forEach(sKey => console.log('  ' + sKey));
+
+   console.log('\nMissing data');
+   Object.keys(dataAvailability)
+      .filter(sKey => !dataAvailability[sKey])
+      .forEach(sKey => console.log('  ' + sKey));
+
+   console.log(' ');
 
    //Add the Direct+ request details to the page
    let tbl = getBasicDBsTbl('Inquiry details');
@@ -126,12 +135,12 @@ function getDBsDocFrag(oDBs) {
    addBasicDBsTblRow(tbody, 'DUNS', oDBs.inquiryDetail.duns);
    addBasicDBsTblRow(tbody, 'Data blocks', oDBs.inquiryDetail.blockIDs);
    addBasicDBsTblRow(tbody, 'Trade up', oDBs.inquiryDetail.tradeUp);
-   addBasicDBsTblRow(tbody, 'Reference', oDBs.inquiryDetail.customerReference);
+   //addBasicDBsTblRow(tbody, 'Reference', oDBs.inquiryDetail.customerReference);
 
    retDocFrag.appendChild(tbl);
 
    //Add high level DUNS information to the page
-   if(dataAvailability.checkAvailabilityOneOf(['duns', 'primaryName', 'tradeStyleNames', 'operatingStatus'])) {
+   if (['duns', 'primaryName', 'tradeStyleNames', 'operatingStatus'].some(elem => dataAvailability[elem])) {
       console.log('Section \"General\" will be created');
 
       tbl = getBasicDBsTbl('General');
@@ -166,7 +175,7 @@ function getDBsDocFrag(oDBs) {
    }
 
    //Add contact information to the page
-   if(dataAvailability.checkAvailabilityOneOf(['telephone', 'websiteAddress', 'email'])) {
+   if(['telephone', 'websiteAddress', 'email'].some(elem => dataAvailability[elem])) {
       console.log('Section \"Contact @\" will be created');
 
       tbl = getBasicDBsTbl('Contact @');
@@ -215,6 +224,7 @@ function getDBsDocFrag(oDBs) {
       console.log('No data available for section \"Business operations\", it will not be created');
    }
 
+   //Add primary SIC activity code to the page
    if(dataAvailability.primaryIndustryCode) {
       console.log('Section \"Primary (SIC) activity code\" will be created');
 
@@ -228,6 +238,7 @@ function getDBsDocFrag(oDBs) {
       console.log('No data available for section \"Primary (SIC) activity code\", it will not be created');
    }
 
+   //Add stock exchange listing(s) to the page
    if(dataAvailability.stockExchanges) {
       console.log('Section \"Stock exchange(s)\" will be created');
 
