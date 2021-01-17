@@ -70,6 +70,35 @@ function getDBsDocFrag(oDBs) {
       tr.setAttribute('class', 'bottomRow');
    }
 
+   const dplReq = oDBs.inquiryDetail;
+
+   //Escape if the request details are not available on the JSON returned
+   if(!dplReq) {
+      console.log('Data block without request details info, escaping from getDBsDocFrag');
+      return null;
+   }
+
+   const dplDataBlocks = oDBs.inquiryDetail.blockIDs;
+
+   //Escape if the blockIDs property is not available on the JSON returned
+   if(!dplDataBlocks) {
+      console.log('Data block without blockIDs property info, escaping from getDBsDocFrag');
+      return null;
+   }
+
+   //Parse the information contained in property blockIDs
+   oDBs.dbArr = dplDataBlocks.map(dbID => {
+      let oRet = {};
+
+      splitBlockIDs = dbID.split('_');
+
+      oRet.name = splitBlockIDs[0];
+      oRet.level = parseInt(splitBlockIDs[1].slice(-1), 10);
+      oRet.version = splitBlockIDs[2];
+
+      return oRet;
+   });
+   
    const org = oDBs.organization;
 
    //Escape if no organization property is available in the data block object
@@ -87,34 +116,65 @@ function getDBsDocFrag(oDBs) {
    }
 
    //All systems go ➡️ let's create a document fragment based on the data block info
+   const dbCompanyInfo = oDBs.dbArr.find(aDB => aDB.name === 'companyinfo')
 
    //First check actual data availability
    let dataAvailability = {};
 
-   org.duns ? dataAvailability.duns = true : dataAvailability.duns = false;
-   org.primaryName ? dataAvailability.primaryName = true : dataAvailability.primaryName = false;
+   if(dbCompanyInfo) {
+      org.duns ? dataAvailability.duns = true : dataAvailability.duns = false;
+      org.primaryName ? dataAvailability.primaryName = true : dataAvailability.primaryName = false;
+   
+      dataAvailability.tradeStyleNames = org.tradeStyleNames && org.tradeStyleNames.length > 0;
+   
+      dataAvailability.dunsControlStatus = org.dunsControlStatus && !bObjIsEmpty(org.dunsControlStatus);
+      dataAvailability.operatingStatus = dataAvailability.dunsControlStatus && org.dunsControlStatus.operatingStatus
+                                             && !bObjIsEmpty(org.dunsControlStatus.operatingStatus);
+   
+      dataAvailability.primaryAddress = org.primaryAddress && !bObjIsEmpty(org.primaryAddress);
+   
+      dataAvailability.telephone = org.telephone && org.telephone.length > 0;
+   
+      dataAvailability.websiteAddress = org.websiteAddress && org.websiteAddress.length > 0;
+   
+      dataAvailability.email = org.email && org.email.length > 0;
+   
+      dataAvailability.registrationNumbers = org.registrationNumbers && org.registrationNumbers.length > 0;
+   
+      dataAvailability.activities = org.activities && org.activities.length > 0;
+   
+      dataAvailability.primaryIndustryCode = org.primaryIndustryCode && !bObjIsEmpty(org.primaryIndustryCode);
+   
+      dataAvailability.stockExchanges = org.stockExchanges && org.stockExchanges.length > 0;
 
-   dataAvailability.tradeStyleNames = org.tradeStyleNames && org.tradeStyleNames.length > 0;
+      if(dbCompanyInfo.level === 2) {
+         org.registeredName ? dataAvailability.registeredName = true : dataAvailability.registeredName = false;
 
-   dataAvailability.dunsControlStatus = org.dunsControlStatus && !bObjIsEmpty(org.dunsControlStatus);
-   dataAvailability.operatingStatus = dataAvailability.dunsControlStatus && org.dunsControlStatus.operatingStatus
-                                          && !bObjIsEmpty(org.dunsControlStatus.operatingStatus);
+         dataAvailability.businessEntityType = org.businessEntityType 
+                                                   && org.businessEntityType.description;
 
-   dataAvailability.primaryAddress = org.primaryAddress && !bObjIsEmpty(org.primaryAddress);
+         dataAvailability.legalForm = org.legalForm && org.legalForm.description;
 
-   dataAvailability.telephone = org.telephone && org.telephone.length > 0;
+         dataAvailability.registeredDetails = org.registeredDetails
+                                                   && org.registeredDetails.legalForm
+                                                   && org.registeredDetails.legalForm.description;
 
-   dataAvailability.websiteAddress = org.websiteAddress && org.websiteAddress.length > 0;
+         org.startDate ? dataAvailability.startDate = true : dataAvailability.startDate = false;
 
-   dataAvailability.email = org.email && org.email.length > 0;
+         org.incorporatedDate ? dataAvailability.incorporatedDate = true : dataAvailability.incorporatedDate = false;
 
-   dataAvailability.registrationNumbers = org.registrationNumbers && org.registrationNumbers.length > 0;
+         dataAvailability.registeredAddress = org.registeredAddress && !bObjIsEmpty(org.registeredAddress);
 
-   dataAvailability.activities = org.activities && org.activities.length > 0;
+         dataAvailability.mailingAddress = org.mailingAddress && !bObjIsEmpty(org.mailingAddress);
 
-   dataAvailability.primaryIndustryCode = org.primaryIndustryCode && !bObjIsEmpty(org.primaryIndustryCode);
+         dataAvailability.financials = org.financials && org.financials.length > 0;
 
-   dataAvailability.stockExchanges = org.stockExchanges && org.stockExchanges.length > 0;
+         dataAvailability.organizationSizeCategory = org.organizationSizeCategory 
+                                                         && org.organizationSizeCategory.description;
+
+         dataAvailability.isStandalone = typeof org.isStandalone === 'boolean';
+      }
+   }
 
    //Log the data availability
    console.log('\nAvailable data');
@@ -140,15 +200,33 @@ function getDBsDocFrag(oDBs) {
    retDocFrag.appendChild(tbl);
 
    //Add high level DUNS information to the page
-   if (['duns', 'primaryName', 'tradeStyleNames', 'operatingStatus'].some(elem => dataAvailability[elem])) {
+   if(['duns', 'primaryName', 'tradeStyleNames', 'operatingStatus',
+          'registeredName', 'businessEntityType', 'legalForm', 
+          'registeredDetails', 'startDate', 'incorporatedDate'].some(elem => dataAvailability[elem])) {
       console.log('Section \"General\" will be created');
 
       tbl = getBasicDBsTbl('General');
       tbody = tbl.appendChild(document.createElement('tbody'));
       if(dataAvailability.duns) {addBasicDBsTblRow(tbody, 'DUNS', org.duns)}
       if(dataAvailability.primaryName) {addBasicDBsTblRow(tbody, 'Primary name', org.primaryName)}
+      if(dataAvailability.registeredName) {addBasicDBsTblRow(tbody, 'Registered name', org.registeredName)} //Level 2
       if(dataAvailability.tradeStyleNames) {
          addBasicDBsTblRow(tbody, 'Tradestyle(s)', org.tradeStyleNames.map(oTS => oTS.name))
+      }
+      if(dataAvailability.businessEntityType) {
+         addBasicDBsTblRow(tbody, 'Entity type', org.businessEntityType.description) //Level 2
+      }
+      if(dataAvailability.legalForm) {
+         addBasicDBsTblRow(tbody, 'Legal form', org.legalForm.description) //Level 2
+      }
+      if(dataAvailability.registeredDetails) {
+         addBasicDBsTblRow(tbody, 'Registered as', org.registeredDetails.legalForm.description) //Level 2
+      }
+      if(dataAvailability.startDate) {
+         addBasicDBsTblRow(tbody, 'Start date', org.startDate) //Level 2
+      }
+      if(dataAvailability.incorporatedDate) {
+         addBasicDBsTblRow(tbody, 'Incorp. date', org.incorporatedDate) //Level 2
       }
       if(dataAvailability.operatingStatus) {
          addBasicDBsTblRow(tbody, 'Operating status', org.dunsControlStatus.operatingStatus.description)
@@ -161,12 +239,16 @@ function getDBsDocFrag(oDBs) {
    }
 
    //Add address information to the page
-   if(dataAvailability.primaryAddress) {
+   if(['primaryAddress', 'registeredAddress', 'mailingAddress'].some(elem => dataAvailability[elem])) {
       console.log('Section \"Address\" will be created');
 
       tbl = getBasicDBsTbl('Address');
       tbody = tbl.appendChild(document.createElement('tbody'));
-      addBasicDBsTblRow(tbody, 'Primary address', getCiAddr(org.primaryAddress));
+      if(dataAvailability.primaryAddress) {addBasicDBsTblRow(tbody, 'Primary address', getCiAddr(org.primaryAddress))}
+      if(dataAvailability.registeredAddress && !(dataAvailability.primaryAddress && org.primaryAddress.isRegisteredAddress)) {
+         addBasicDBsTblRow(tbody, 'Registered address', getCiAddr(org.registeredAddress)); //Level 2
+      }
+      if(dataAvailability.mailingAddress) {addBasicDBsTblRow(tbody, 'Mail address', getCiAddr(org.mailingAddress))} //Level 2
 
       retDocFrag.appendChild(tbl);
    }
@@ -190,6 +272,28 @@ function getDBsDocFrag(oDBs) {
    }
    else {
       console.log('No data available for section \"Contact @\", it will not be created');
+   }
+
+   //Add company size related elements to the page
+   if(['financials', 'organizationSizeCategory', 'isStandalone'].some(elem => dataAvailability[elem])) {
+      console.log('Section \"Company size\" will be created');
+
+      tbl = getBasicDBsTbl('Company size');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+      if(dataAvailability.financials) {
+         addBasicDBsTblRow(tbody, 'Yearly revenue', getCiYearlyRevenue(org.financials[0])) //Level 2
+      }
+      if(dataAvailability.organizationSizeCategory) {
+         addBasicDBsTblRow(tbody, 'Size category', org.organizationSizeCategory.description) //Level 2
+      }
+      if(dataAvailability.isStandalone) {
+         addBasicDBsTblRow(tbody, 'Standalone', org.isStandalone ? 'Yes' : 'No') //Level 2
+      }
+
+      retDocFrag.appendChild(tbl);
+   }
+   else {
+      console.log('No data available for section \"Company size\", it will not be created');
    }
 
    //Add registration number(s) to the page

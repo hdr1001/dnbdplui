@@ -20,6 +20,12 @@
 //
 // *********************************************************************
 
+//Settings for displaying currency amounts
+const oCurrOpts = {
+   style: 'currency',
+   minimumFractionDigits: 0
+};
+
 //Check if an object is an empty object
 function bObjIsEmpty(obj) {
    return Object.keys(obj).length === 0 && obj.constructor === Object;
@@ -82,4 +88,30 @@ function getDescNoCountryCode(sDesc) {
    }
 
    return sDesc.trim();
+}
+
+//Get yearly revenue number from the financials object
+function getCiYearlyRevenue(oFin) {
+   let sRet = 'NA';
+
+   if(oFin.yearlyRevenue && oFin.yearlyRevenue[0]) {
+      if(oFin.yearlyRevenue[0].value && oFin.yearlyRevenue[0].currency) {
+         oCurrOpts.currency =  oFin.yearlyRevenue[0].currency;
+
+         const intlNumFormat = new Intl.NumberFormat('en-us', oCurrOpts);
+
+         sRet = intlNumFormat.format(oFin.yearlyRevenue[0].value)
+      }
+      else {
+         if(oFin.yearlyRevenue[0].value) {
+            sRet = oFin.yearlyRevenue[0].value
+         }
+      }
+
+      if(oFin.reliabilityDnBCode === 9093) {
+         sRet += ' (*estimate)'
+      }
+   }
+
+   return sRet;
 }
