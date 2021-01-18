@@ -115,3 +115,29 @@ function getCiYearlyRevenue(oFin) {
 
    return sRet;
 }
+
+//Get number of employees figure from object
+function getCiNumEmpl(oNumEmpl) {
+   let oRet = {
+      sLabel: 'Number of Employees',
+      sContent: 'NA'
+   };
+
+   if(typeof oNumEmpl.value === 'number') {oRet.sContent = oNumEmpl.value.toString()}
+
+   let sLabelAdd = '';
+   if(oNumEmpl.informationScopeDescription) {sLabelAdd = oNumEmpl.informationScopeDescription}
+
+   if(oNumEmpl.reliabilityDescription && sLabelAdd) {
+      sLabelAdd += ' & ' + oNumEmpl.reliabilityDescription;
+   }
+   else if(oNumEmpl.reliabilityDescription) {
+      sLabelAdd = oNumEmpl.reliabilityDescription;
+   }
+
+   if(sLabelAdd) {
+      oRet.sLabel += ' - ' + sLabelAdd;
+   }
+
+   return oRet;
+}

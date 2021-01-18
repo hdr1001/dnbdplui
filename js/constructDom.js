@@ -172,6 +172,8 @@ function getDBsDocFrag(oDBs) {
          dataAvailability.organizationSizeCategory = org.organizationSizeCategory 
                                                          && org.organizationSizeCategory.description;
 
+         dataAvailability.numberOfEmployees = org.numberOfEmployees && org.numberOfEmployees.length > 0;
+
          dataAvailability.isStandalone = typeof org.isStandalone === 'boolean';
       }
    }
@@ -282,6 +284,13 @@ function getDBsDocFrag(oDBs) {
       tbody = tbl.appendChild(document.createElement('tbody'));
       if(dataAvailability.financials) {
          addBasicDBsTblRow(tbody, 'Yearly revenue', getCiYearlyRevenue(org.financials[0])) //Level 2
+      }
+      if(dataAvailability.numberOfEmployees) {
+         org.numberOfEmployees //Level 2
+            .map(oNumEmpl => getCiNumEmpl(oNumEmpl))
+            .forEach(oRow => {
+               addBasicDBsTblRow(tbody, oRow.sLabel, oRow.sContent)
+            })
       }
       if(dataAvailability.organizationSizeCategory) {
          addBasicDBsTblRow(tbody, 'Size category', org.organizationSizeCategory.description) //Level 2
