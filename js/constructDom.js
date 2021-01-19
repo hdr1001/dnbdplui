@@ -35,6 +35,7 @@ function getDBsDocFrag(oDBs) {
 
    //Add a row (or rows) to a basic data block data table
    function addBasicDBsTblRow(tbody, rowLabel, rowContent) {
+      const bLabelIsArray = Array.isArray(rowLabel);
       const bContentIsArray = Array.isArray(rowContent);
 
       //Skip if no content available or empty array
@@ -45,7 +46,17 @@ function getDBsDocFrag(oDBs) {
       let tr = tbody.appendChild(document.createElement('tr'));
 
       let td, th = tr.appendChild(document.createElement('th'));
-      th.appendChild(document.createTextNode(rowLabel));
+      if(bLabelIsArray) {
+         rowLabel.forEach((lbl, idx) => {
+            th.appendChild(document.createTextNode(lbl));
+            if(idx < rowLabel.length - 1) {
+               th.appendChild(document.createElement('br'))
+            }
+         })
+      }
+      else {
+         th.appendChild(document.createTextNode(rowLabel));
+      }
 
       if(bContentIsArray) { //Multiple values
          let tdMultRow;
@@ -175,6 +186,8 @@ function getDBsDocFrag(oDBs) {
          dataAvailability.numberOfEmployees = org.numberOfEmployees && org.numberOfEmployees.length > 0;
 
          dataAvailability.isStandalone = typeof org.isStandalone === 'boolean';
+
+         dataAvailability.industryCodes = org.industryCodes && org.industryCodes.length > 0;
       }
    }
 
@@ -286,10 +299,10 @@ function getDBsDocFrag(oDBs) {
          addBasicDBsTblRow(tbody, 'Yearly revenue', getCiYearlyRevenue(org.financials[0])) //Level 2
       }
       if(dataAvailability.numberOfEmployees) {
-         org.numberOfEmployees //Level 2
+         org.numberOfEmployees
             .map(oNumEmpl => getCiNumEmpl(oNumEmpl))
             .forEach(oRow => {
-               addBasicDBsTblRow(tbody, oRow.sLabel, oRow.sContent)
+               addBasicDBsTblRow(tbody, oRow.label, oRow.sContent) //Level 2
             })
       }
       if(dataAvailability.organizationSizeCategory) {
@@ -338,7 +351,7 @@ function getDBsDocFrag(oDBs) {
    }
 
    //Add primary SIC activity code to the page
-   if(dataAvailability.primaryIndustryCode) {
+   if(dataAvailability.primaryIndustryCode && !dataAvailability.industryCodes) {
       console.log('Section \"Primary (SIC) activity code\" will be created');
 
       tbl = getBasicDBsTbl('Primary (SIC) activity code');
@@ -348,7 +361,26 @@ function getDBsDocFrag(oDBs) {
       retDocFrag.appendChild(tbl);
    }
    else {
-      console.log('No data available for section \"Primary (SIC) activity code\", it will not be created');
+      if(!dataAvailability.primaryIndustryCode) {
+         console.log('No data available for section \"Primary (SIC) activity code\", it will not be created');
+      }
+      else {
+         console.log('Industry codes available, section \"Primary (SIC) activity code\" will not be created');
+      }
+   }
+
+   if(dataAvailability.industryCodes) {
+      console.log('Section \"Activity code\" will be created');
+
+      tbl = getBasicDBsTbl('Activity codes');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+
+      addActCodeTblRows(tbody, org.industryCodes); //Level 2
+
+      retDocFrag.appendChild(tbl);
+   }
+   else {
+      console.log('No data available for section \"Activity codes\", it will not be created');
    }
 
    //Add stock exchange listing(s) to the page

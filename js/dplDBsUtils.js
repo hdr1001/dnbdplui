@@ -118,8 +118,10 @@ function getCiYearlyRevenue(oFin) {
 
 //Get number of employees figure from object
 function getCiNumEmpl(oNumEmpl) {
+   const sLabel = 'Number of Employees';
+
    let oRet = {
-      sLabel: 'Number of Employees',
+      label: sLabel,
       sContent: 'NA'
    };
 
@@ -136,8 +138,33 @@ function getCiNumEmpl(oNumEmpl) {
    }
 
    if(sLabelAdd) {
-      oRet.sLabel += ' - ' + sLabelAdd;
+      oRet.label = [];
+      oRet.label.push(sLabel);
+      oRet.label.push(sLabelAdd);
    }
 
    return oRet;
+}
+
+//Add rows to the activity row table
+function addActCodeTblRows(tbody, arrIndustryCodes) {
+   let tr, th, td;
+
+   tr = tbody.appendChild(document.createElement('tr'));
+
+   th = tr.appendChild(document.createElement('th'));
+   th.appendChild(document.createTextNode('Code'));
+
+   th = tr.appendChild(document.createElement('th'));
+   th.appendChild(document.createTextNode('Description'));
+
+   arrIndustryCodes.forEach(oIndsCode => {
+      tr = tbody.appendChild(document.createElement('tr'));
+
+      td = tr.appendChild(document.createElement('td'));
+      td.appendChild(document.createTextNode(oIndsCode.code));
+
+      td = tr.appendChild(document.createElement('td'));
+      td.appendChild(document.createTextNode(oIndsCode.description));
+   })
 }
