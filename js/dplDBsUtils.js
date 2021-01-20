@@ -150,14 +150,34 @@ function getCiNumEmpl(oNumEmpl) {
 function addActCodeTblRows(tbody, arrIndustryCodes) {
    let tr, th, td;
 
+   //Deduplicate the industry code type codes
+   let arrUniqueActCodeTypes = [];
+   
+   arrIndustryCodes.forEach(oIndustryCode => {
+      if(!arrUniqueActCodeTypes.find(elem => elem.typeDnBCode === oIndustryCode.typeDnBCode)) {
+         arrUniqueActCodeTypes.push({
+            typeDnBCode: oIndustryCode.typeDnBCode,
+            typeDescription: oIndustryCode.typeDescription
+         })
+      }
+   });
+
+   //Create a table header row including a type code select
    tr = tbody.appendChild(document.createElement('tr'));
 
    th = tr.appendChild(document.createElement('th'));
    th.appendChild(document.createTextNode('Code'));
 
    th = tr.appendChild(document.createElement('th'));
-   th.appendChild(document.createTextNode('Description'));
+   let opt, selectActType = th.appendChild(document.createElement('select'));
 
+   arrUniqueActCodeTypes.forEach(oActType => {
+      opt = selectActType.appendChild(document.createElement('option'));
+      opt.setAttribute('value', oActType.typeDnBCode.toString());
+      opt.appendChild(document.createTextNode(oActType.typeDescription));
+   })
+
+   //Add the individual industry codes on table rows
    arrIndustryCodes.forEach(oIndsCode => {
       tr = tbody.appendChild(document.createElement('tr'));
 

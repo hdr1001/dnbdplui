@@ -369,6 +369,7 @@ function getDBsDocFrag(oDBs) {
       }
    }
 
+   //Add industry codes to the page for Company Information level 2
    if(dataAvailability.industryCodes) {
       console.log('Section \"Activity code\" will be created');
 
