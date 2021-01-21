@@ -162,14 +162,11 @@ function addActCodeTblRows(tbody, arrIndustryCodes) {
       }
    });
 
-   //Create a table header row including a type code select
+   //Create a type code select and a table header row 
    tr = tbody.appendChild(document.createElement('tr'));
-
-   th = tr.appendChild(document.createElement('th'));
-   th.appendChild(document.createTextNode('Code'));
-
-   th = tr.appendChild(document.createElement('th'));
-   let opt, selectActType = th.appendChild(document.createElement('select'));
+   td = tr.appendChild(document.createElement('td'));
+   td.setAttribute('colspan', '2');
+   let opt, selectActType = td.appendChild(document.createElement('select'));
 
    arrUniqueActCodeTypes.forEach(oActType => {
       opt = selectActType.appendChild(document.createElement('option'));
@@ -177,14 +174,36 @@ function addActCodeTblRows(tbody, arrIndustryCodes) {
       opt.appendChild(document.createTextNode(oActType.typeDescription));
    })
 
+   tr = tbody.appendChild(document.createElement('tr'));
+   th = tr.appendChild(document.createElement('th'));
+   th.appendChild(document.createTextNode('Code'));
+   th = tr.appendChild(document.createElement('th'));
+   th.appendChild(document.createTextNode('Description'));
+
    //Add the individual industry codes on table rows
    arrIndustryCodes.forEach(oIndsCode => {
       tr = tbody.appendChild(document.createElement('tr'));
+      tr.setAttribute('class', 'industryCodeRow ' + oIndsCode.typeDnBCode);
 
       td = tr.appendChild(document.createElement('td'));
       td.appendChild(document.createTextNode(oIndsCode.code));
 
       td = tr.appendChild(document.createElement('td'));
       td.appendChild(document.createTextNode(oIndsCode.description));
-   })
+   });
+
+   //Add an onChange eventhandler to the select control
+   selectActType.addEventListener('change', event => {
+      tbody.querySelectorAll('tr.industryCodeRow').forEach(rowIndustryCode => {
+         if(rowIndustryCode.classList.contains(selectActType.value)) {
+            rowIndustryCode.style.display = 'table-row';
+         }
+         else {
+            rowIndustryCode.style.display = 'none';
+         }
+      })
+   });
+
+   //Trigger the select component change event
+   selectActType.dispatchEvent(new Event('change'));
 }
