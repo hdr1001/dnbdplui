@@ -166,6 +166,8 @@ function getDBsDocFrag(oDBs) {
 
          dataAvailability.legalForm = org.legalForm && org.legalForm.description;
 
+         dataAvailability.controlOwnershipType = org.controlOwnershipType && !bObjIsEmpty(org.controlOwnershipType)
+
          dataAvailability.registeredDetails = org.registeredDetails
                                                    && org.registeredDetails.legalForm
                                                    && org.registeredDetails.legalForm.description;
@@ -236,6 +238,9 @@ function getDBsDocFrag(oDBs) {
       }
       if(dataAvailability.registeredDetails) {
          addBasicDBsTblRow(tbody, 'Registered as', org.registeredDetails.legalForm.description) //Level 2
+      }
+      if(dataAvailability.controlOwnershipType) {
+         addBasicDBsTblRow(tbody, 'Ownership type', org.controlOwnershipType.description) //Level 2
       }
       if(dataAvailability.startDate) {
          addBasicDBsTblRow(tbody, 'Start date', org.startDate) //Level 2
