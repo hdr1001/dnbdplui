@@ -2,9 +2,16 @@ body {
    font-family: "Open Sans", Verdana, Tahoma, Arial, sans-serif;
 }
 
+div#dnbDplDBs {
+   display: flex;
+   flex-direction: column;
+   flex-wrap: wrap;
+   max-height: 800px;
+}
+
 table.dnbDplDBsSection {
    border-collapse: collapse;
-   margin: 25px 0;
+   margin: 10px 10px;
    width: 420px;
    box-shadow: 0 0 20px 1px rgba(0, 0, 0, .2);
 }
