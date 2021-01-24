@@ -1,12 +1,12 @@
 {
   "transactionDetail": {
-    "transactionID": "rrt-097c1ff912c8673f5-a-eu-31190-46340277-5",
-    "transactionTimestamp": "2021-01-15T12:44:54.771Z",
+    "transactionID": "rrt-097c1ff912c8673f5-a-eu-27002-50058649-1",
+    "transactionTimestamp": "2021-01-24T14:19:32.286Z",
     "inLanguage": "en-US"
   },
   "inquiryDetail": {
     "duns": "407809623",
-    "blockIDs": ["companyinfo_L2_v1"],
+    "blockIDs": ["companyinfo_L2_v1", "hierarchyconnections_L1_v1"],
     "tradeUp": "hq"
   },
   "organization": {
@@ -190,7 +190,7 @@
       "startDate": "2007-12-05",
       "registrationLocation": {}
     },
-    "telephone": [{ "telephoneNumber": "123456789", "isdCode": "31" }],
+    "telephone": [],
     "registeredDetails": {
       "legalForm": {
         "description": "NV Normal Structure",
@@ -208,47 +208,7 @@
       { "name": "Agglo bouw", "priority": 1 },
       { "name": "Agglo Projectontwikkeling", "priority": 2 }
     ],
-    "mailingAddress": {
-      "language": {
-        "description": "Dutch",
-        "dnbCode": 38
-      },
-      "addressCountry": {
-        "name": "Netherlands",
-        "isoAlpha2Code": "NL"
-      },
-      "continentalRegion": {
-        "name": "Europe"
-      },
-      "addressLocality": {
-        "name": "Hoek van Holland"
-      },
-      "minorTownName": null,
-      "addressRegion": {
-        "name": "Zuid-Holland",
-        "abbreviatedName": null
-      },
-      "addressCounty": {
-        "name": "Zuid-Holland"
-      },
-      "postalCode": "3150 AB",
-      "postalCodePosition": {
-        "description": "Post Code presented before Town/City name",
-        "dnbCode": 1009
-      },
-      "postalRoute": null,
-      "streetNumber": null,
-      "streetName": null,
-      "streetAddress": {
-        "line1": "Postbus 654",
-        "line2": null
-      },
-      "postOfficeBox": {
-        "postOfficeBoxNumber": "654",
-        "typeDescription": "Post Office Box (Supplied by public Post Office authority.)",
-        "typeDnBCode": 120
-      }
-    },
+    "mailingAddress": {},
     "charterType": {},
     "registeredAddress": {
       "language": { "description": "Dutch", "dnbCode": 38 },
@@ -305,10 +265,55 @@
       },
       "statisticalArea": {},
       "isManufacturingLocation": null
+    },
+    "corporateLinkage": {
+      "familytreeRolesPlayed": [
+        { "description": "Subsidiary", "dnbCode": 9159 }
+      ],
+      "hierarchyLevel": 2,
+      "globalUltimateFamilyTreeMembersCount": 4,
+      "globalUltimate": {
+        "duns": "282823332",
+        "primaryName": "Agglo Worldwide SA",
+        "primaryAddress": {
+          "addressCountry": { "name": "Belgium", "isoAlpha2Code": "BE" },
+          "continentalRegion": { "name": "Europe" },
+          "addressLocality": { "name": "Bruxelles" },
+          "addressRegion": {},
+          "postalCode": "1070",
+          "streetAddress": { "line1": "Rue Gheude 56", "line2": null }
+        }
+      },
+      "domesticUltimate": {
+        "duns": "409525869",
+        "primaryName": "Agglo Holding Netherlands",
+        "primaryAddress": {
+          "addressCountry": { "name": "Netherlands", "isoAlpha2Code": "NL" },
+          "continentalRegion": { "name": "Europe" },
+          "addressLocality": { "name": "Rotterdam" },
+          "addressRegion": { "name": "ZUID-HOLLAND", "abbreviatedName": null },
+          "postalCode": "3072 MD",
+          "streetAddress": { "line1": "Otto Reuchlinweg 1028", "line2": null }
+        }
+      },
+      "parent": {
+        "duns": "409525979",
+        "primaryName": "Agglo Holding",
+        "primaryAddress": {
+          "addressCountry": { "name": "Netherlands", "isoAlpha2Code": "NL" },
+          "continentalRegion": { "name": "Europe" },
+          "addressLocality": { "name": "Ridderkerk" },
+          "addressRegion": { "name": "ZUID-HOLLAND", "abbreviatedName": null },
+          "postalCode": "2983 GS",
+          "streetAddress": { "line1": "Ringdijk 458", "line2": null }
+        }
+      },
+      "headQuarter": {}
     }
   },
   "blockStatus": [
     { "blockID": "companyinfo_L2_v1", "status": "ok", "reason": null },
+    { "blockID": "hierarchyconnections_L1_v1", "status": "ok", "reason": null },
     { "blockID": "baseinfo_L1_v1", "status": "ok", "reason": null }
   ]
 }

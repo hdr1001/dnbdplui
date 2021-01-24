@@ -31,6 +31,65 @@ function bObjIsEmpty(obj) {
    return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
+//Create a table for displaying basic data block data
+function getBasicDBsTbl(title) {
+   const tbl = document.createElement('table');
+   tbl.setAttribute('class', 'dnbDplDBsSection')
+
+   const tblCapt = tbl.appendChild(document.createElement('caption'));
+   tblCapt.appendChild(document.createTextNode(title));
+
+   return tbl;
+}
+
+//Add a row (or rows) to a basic data block data table
+function addBasicDBsTblRow(tbody, rowLabel, rowContent) {
+   const bLabelIsArray = Array.isArray(rowLabel);
+   const bContentIsArray = Array.isArray(rowContent);
+
+   //Skip if no content available or empty array
+   if(!rowContent || (bContentIsArray && rowContent.length === 0)) {
+      console.log('No content available for ' + rowLabel); return;
+   }
+
+   let tr = tbody.appendChild(document.createElement('tr'));
+
+   let td, th = tr.appendChild(document.createElement('th'));
+   if(bLabelIsArray) {
+      rowLabel.forEach((lbl, idx) => {
+         th.appendChild(document.createTextNode(lbl));
+         if(idx < rowLabel.length - 1) {
+            th.appendChild(document.createElement('br'))
+         }
+      })
+   }
+   else {
+      th.appendChild(document.createTextNode(rowLabel));
+   }
+
+   if(bContentIsArray) { //Multiple values
+      let tdMultRow;
+
+      rowContent.forEach((arrElem, idx) => {
+         let tdMultRow;
+
+         if(idx > 0) {
+            tr = tbody.appendChild(document.createElement('tr'));
+            th.setAttribute('rowspan', idx + 1);
+         }
+
+         tdMultRow = tr.appendChild(document.createElement('td'));
+         tdMultRow.appendChild(document.createTextNode(arrElem));
+      });
+   }
+   else { //Single value
+      td = tr.appendChild(document.createElement('td'));
+      td.appendChild(document.createTextNode(rowContent ? rowContent : ''));
+   }
+
+   tr.setAttribute('class', 'bottomRow');
+}
+
 //Company Info address object conversion
 function getCiAddr(oAddr) {
    let arrAddr = [], str = '';
