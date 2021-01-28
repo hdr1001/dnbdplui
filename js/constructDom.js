@@ -74,6 +74,13 @@ function getDBsDocFrag(oDBs) {
    //First check actual data availability
    let dataAvailability = {};
 
+   //Check for the availability of the common data elements
+   org.duns ? dataAvailability.duns = true : dataAvailability.duns = false;
+   org.primaryName ? dataAvailability.primaryName = true : dataAvailability.primaryName = false;
+   org.countryISOAlpha2Code ? dataAvailability.countryISOAlpha2Code = true : 
+                                 dataAvailability.countryISOAlpha2Code = false;
+
+   //Check for the availability of specific properties in specific blocks
    if(dbCompanyInfo) { ciDataAvailability(org, dataAvailability, dbCompanyInfo.level) }
    if(dbHierarchyConn) { hcDataAvailability(org, dataAvailability) }
 
@@ -97,6 +104,18 @@ function getDBsDocFrag(oDBs) {
    addBasicDBsTblRow(tbody, 'Data blocks', oDBs.inquiryDetail.blockIDs);
    addBasicDBsTblRow(tbody, 'Trade up', oDBs.inquiryDetail.tradeUp);
    //addBasicDBsTblRow(tbody, 'Reference', oDBs.inquiryDetail.customerReference);
+
+   retDocFrag.appendChild(tbl);
+
+   //Add a section concerning the DUNS delivered
+   tbl = getBasicDBsTbl('Common data');
+   tbl.setAttribute('id', 'commonData');
+   tbody = tbl.appendChild(document.createElement('tbody'));
+   if(dataAvailability.duns) { addBasicDBsTblRow(tbody, 'DUNS delivered', org.duns) }
+   if(dataAvailability.primaryName) { addBasicDBsTblRow(tbody, 'Primary name', org.primaryName) }
+   if(dataAvailability.countryISOAlpha2Code) {
+      addBasicDBsTblRow(tbody, 'Country code', org.countryISOAlpha2Code)
+   }
 
    retDocFrag.appendChild(tbl);
 

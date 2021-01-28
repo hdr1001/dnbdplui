@@ -24,9 +24,6 @@
 //Check for the availability of important properties in the
 //Company Information Data Block
 function ciDataAvailability(org, dataAvailability, dbLevel) {
-   org.duns ? dataAvailability.duns = true : dataAvailability.duns = false;
-   org.primaryName ? dataAvailability.primaryName = true : dataAvailability.primaryName = false;
-
    dataAvailability.tradeStyleNames = org.tradeStyleNames && org.tradeStyleNames.length > 0;
 
    dataAvailability.dunsControlStatus = org.dunsControlStatus && !bObjIsEmpty(org.dunsControlStatus);
@@ -303,6 +300,10 @@ function createCiSections(org, dataAvailability, retDocFrag) {
       }
 
       retDocFrag.appendChild(tbl);
+
+      //Remove the Common data section in case a General section is available
+      let commonDataTbl = retDocFrag.getElementById('commonData');
+      if(commonDataTbl) { commonDataTbl.parentNode.removeChild(commonDataTbl) }
    }
    else {
       console.log('No data available for section \"General\", it will not be created');
