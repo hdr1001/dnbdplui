@@ -27,6 +27,14 @@ function hcDataAvailability(org, dataAvailability) {
    dataAvailability.corporateLinkage = org.corporateLinkage && !bObjIsEmpty(org.corporateLinkage);
 
    if(dataAvailability.corporateLinkage) {
+      dataAvailability.familytreeRolesPlayed = org.corporateLinkage.familytreeRolesPlayed && 
+                                                   !bObjIsEmpty(org.corporateLinkage.familytreeRolesPlayed);
+
+      org.corporateLinkage.hierarchyLevel ? dataAvailability.hierarchyLevel = true : dataAvailability.hierarchyLevel = false;
+
+      org.corporateLinkage.globalUltimateFamilyTreeMembersCount ? dataAvailability.globalUltimateFamilyTreeMembersCount = true : 
+                                                                     dataAvailability.globalUltimateFamilyTreeMembersCount = false;
+
       dataAvailability.headQuarter = org.corporateLinkage.headQuarter && !bObjIsEmpty(org.corporateLinkage.headQuarter);
 
       dataAvailability.parent = org.corporateLinkage.parent && !bObjIsEmpty(org.corporateLinkage.parent);
@@ -62,6 +70,26 @@ function createHcSections(org, dataAvailability, retDocFrag) {
       if(oAddr.addressCountry && oAddr.addressCountry.name) {arrAddr.push(oAddr.addressCountry.name)}
 
       return arrAddr;
+   }
+
+   //Add high level corporate hierarchy information section to the page
+   if(['familytreeRolesPlayed', 'hierarchyLevel', 'globalUltimateFamilyTreeMembersCount'].some(elem => dataAvailability[elem])) {
+      console.log('Section \"Corporate hierarchy information\" will be created');
+
+      tbl = getBasicDBsTbl('Corporate hierarchy information');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+      if(dataAvailability.familytreeRolesPlayed) {
+         addBasicDBsTblRow(tbody, 'Roles played', org.corporateLinkage.familytreeRolesPlayed.map(oRole => oRole.description))
+      }
+      if(dataAvailability.hierarchyLevel) {addBasicDBsTblRow(tbody, 'Hierarchy level', org.corporateLinkage.hierarchyLevel)}
+      if(dataAvailability.globalUltimateFamilyTreeMembersCount) {
+         addBasicDBsTblRow(tbody, 'Member count', org.corporateLinkage.globalUltimateFamilyTreeMembersCount)
+      }
+
+      retDocFrag.appendChild(tbl);
+   }
+   else {
+      console.log('No data available for section \"Corporate hierarchy information\", it will not be created');
    }
 
    //Different hierarchy levels representing the same DUNS collapse
@@ -110,8 +138,8 @@ function createHcSections(org, dataAvailability, retDocFrag) {
       if(dataAvailability.headQuarter) {
          arrHierarchySections.push({title: 'Company HQ', obj: org.corporateLinkage.headQuarter})
       }
-      else {
-         arrHierarchySections.push({title: 'Parent company', obj: org.corporateLinkage.parent})
+      else if(dataAvailability.parent) {
+            arrHierarchySections.push({title: 'Parent company', obj: org.corporateLinkage.parent})
       }
       arrHierarchySections.push({title: 'Domestic & global ultimate', obj: org.corporateLinkage.globalUltimate})
    }
@@ -119,7 +147,7 @@ function createHcSections(org, dataAvailability, retDocFrag) {
       if(dataAvailability.headQuarter) {
          arrHierarchySections.push({title: 'Company HQ', obj: org.corporateLinkage.headQuarter})
       }
-      else {
+      else if(dataAvailability.parent) {
          arrHierarchySections.push({title: 'Parent company', obj: org.corporateLinkage.parent})
       }
       arrHierarchySections.push({title: 'Domestic ultimate', obj: org.corporateLinkage.domesticUltimate});
