@@ -160,7 +160,23 @@
         "priority": 1
       }
     ],
-    "stockExchanges": [],
+    "stockExchanges": [
+      {
+        "tickerName": "Euronext Amsterdam:XYZ",
+        "exchangeName": { "description": "Euronext Amsterdam" },
+        "isPrimary": true
+      },
+      {
+        "tickerName": "LSE:0XYZ",
+        "exchangeName": { "description": "LSE" },
+        "isPrimary": null
+      },
+      {
+        "tickerName": "Munich:XYZ2",
+        "exchangeName": { "description": "Munich" },
+        "isPrimary": null
+      }
+    ],
     "numberOfEmployees": [
       {
         "value": 369,
@@ -190,7 +206,7 @@
       "startDate": "2007-12-05",
       "registrationLocation": {}
     },
-    "telephone": [],
+    "telephone": [{ "telephoneNumber": "123456789", "isdCode": "31" }],
     "registeredDetails": {
       "legalForm": {
         "description": "NV Normal Structure",
@@ -208,7 +224,47 @@
       { "name": "Agglo bouw", "priority": 1 },
       { "name": "Agglo Projectontwikkeling", "priority": 2 }
     ],
-    "mailingAddress": {},
+    "mailingAddress": {
+      "language": {
+        "description": "Dutch",
+        "dnbCode": 38
+      },
+      "addressCountry": {
+        "name": "Netherlands",
+        "isoAlpha2Code": "NL"
+      },
+      "continentalRegion": {
+        "name": "Europe"
+      },
+      "addressLocality": {
+        "name": "Hoek van Holland"
+      },
+      "minorTownName": null,
+      "addressRegion": {
+        "name": "Zuid-Holland",
+        "abbreviatedName": null
+      },
+      "addressCounty": {
+        "name": "Zuid-Holland"
+      },
+      "postalCode": "3150 AB",
+      "postalCodePosition": {
+        "description": "Post Code presented before Town/City name",
+        "dnbCode": 1009
+      },
+      "postalRoute": null,
+      "streetNumber": null,
+      "streetName": null,
+      "streetAddress": {
+        "line1": "Postbus 654",
+        "line2": null
+      },
+      "postOfficeBox": {
+        "postOfficeBoxNumber": "654",
+        "typeDescription": "Post Office Box (Supplied by public Post Office authority.)",
+        "typeDnBCode": 120
+      }
+    },
     "charterType": {},
     "registeredAddress": {
       "language": { "description": "Dutch", "dnbCode": 38 },

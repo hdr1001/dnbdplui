@@ -160,7 +160,23 @@
         "priority": 1
       }
     ],
-    "stockExchanges": [],
+    "stockExchanges": [
+      {
+        "tickerName": "Euronext Amsterdam:XYZ",
+        "exchangeName": { "description": "Euronext Amsterdam" },
+        "isPrimary": true
+      },
+      {
+        "tickerName": "LSE:0XYZ",
+        "exchangeName": { "description": "LSE" },
+        "isPrimary": null
+      },
+      {
+        "tickerName": "Munich:XYZ2",
+        "exchangeName": { "description": "Munich" },
+        "isPrimary": null
+      }
+    ],
     "numberOfEmployees": [
       {
         "value": 369,

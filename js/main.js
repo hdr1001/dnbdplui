@@ -49,17 +49,25 @@ document.addEventListener('DOMContentLoaded', () => {
                   console.log(err.message); return;
                }
 
-               //The data block info will be appended to the div dnbDplDBs
-               const divDBs = document.getElementById('dnbDplDBs');
+               //The data block info will be appended to the div dnbDplDBsContainer
+               const divDBsContainer = document.getElementById('dnbDplDBsContainer');
 
-               if(divDBs) {
+               if(divDBsContainer) {
+                  //The data block sections will be wrapped in a container
+                  const divDnbDplDBs = document.createElement('div');
+                  divDnbDplDBs.setAttribute('class', 'dnbDplDBs');
+
+                  //Create the DOM code for the JSON data
                   const docFrag = getDBsDocFrag(oDBs);
 
                   //Append the document fragment if successfully created
-                  if(docFrag) { divDBs.appendChild(docFrag) }
+                  if(docFrag) { 
+                     divDnbDplDBs.appendChild(docFrag);
+                     divDBsContainer.insertBefore(divDnbDplDBs, divDBsContainer.firstChild);
+                  }
                }
                else {
-                  console.log('getElementById dnbDplDBs failed');
+                  console.log('getElementById dnbDplDBsContainer failed');
                }
             });
 

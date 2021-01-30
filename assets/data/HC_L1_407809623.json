@@ -1,0 +1,65 @@
+{
+  "transactionDetail": {
+    "transactionID": "rrt-097c1ff912c8673f5-a-eu-27003-52704920-19",
+    "transactionTimestamp": "2021-01-30T17:21:35.925Z",
+    "inLanguage": "en-US"
+  },
+  "inquiryDetail": {
+    "duns": "407809623",
+    "blockIDs": ["hierarchyconnections_L1_v1"],
+    "tradeUp": "hq"
+  },
+  "organization": {
+    "duns": "407809623",
+    "countryISOAlpha2Code": "NL",
+    "primaryName": "Agglo-Bouw Voorbeeld B.V.",
+    "corporateLinkage": {
+      "familytreeRolesPlayed": [
+        { "description": "Subsidiary", "dnbCode": 9159 }
+      ],
+      "hierarchyLevel": 2,
+      "globalUltimateFamilyTreeMembersCount": 4,
+      "globalUltimate": {
+         "duns": "282823332",
+         "primaryName": "Agglo Worldwide SA",
+         "primaryAddress": {
+           "addressCountry": { "name": "Belgium", "isoAlpha2Code": "BE" },
+           "continentalRegion": { "name": "Europe" },
+           "addressLocality": { "name": "Bruxelles" },
+           "addressRegion": {},
+           "postalCode": "1070",
+           "streetAddress": { "line1": "Rue Gheude 56", "line2": null }
+        }
+      },
+      "domesticUltimate": {
+         "duns": "409525869",
+         "primaryName": "Agglo Holding Netherlands",
+         "primaryAddress": {
+           "addressCountry": { "name": "Netherlands", "isoAlpha2Code": "NL" },
+           "continentalRegion": { "name": "Europe" },
+           "addressLocality": { "name": "Rotterdam" },
+           "addressRegion": { "name": "ZUID-HOLLAND", "abbreviatedName": null },
+           "postalCode": "3072 MD",
+           "streetAddress": { "line1": "Otto Reuchlinweg 1028", "line2": null }
+         }
+      },
+      "parent": {
+         "duns": "409525979",
+         "primaryName": "Agglo Civil Engineering",
+         "primaryAddress": {
+           "addressCountry": { "name": "Netherlands", "isoAlpha2Code": "NL" },
+           "continentalRegion": { "name": "Europe" },
+           "addressLocality": { "name": "Ridderkerk" },
+           "addressRegion": { "name": "ZUID-HOLLAND", "abbreviatedName": null },
+           "postalCode": "2983 GS",
+           "streetAddress": { "line1": "Ringdijk 458", "line2": null }
+         }
+      },
+      "headQuarter": {}
+    }
+  },
+  "blockStatus": [
+    { "blockID": "hierarchyconnections_L1_v1", "status": "ok", "reason": null },
+    { "blockID": "baseinfo_L1_v1", "status": "ok", "reason": null }
+  ]
+}
