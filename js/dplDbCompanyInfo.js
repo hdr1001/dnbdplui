@@ -23,7 +23,7 @@
 
 //Check for the availability of important properties in the
 //Company Information Data Block
-function ciDataAvailability(org, dataAvailability, dbLevel) {
+function ciDataAvailability(org, dataAvailability) {
    dataAvailability.tradeStyleNames = org.tradeStyleNames && org.tradeStyleNames.length > 0;
 
    dataAvailability.dunsControlStatus = org.dunsControlStatus && !bObjIsEmpty(org.dunsControlStatus);
@@ -46,7 +46,7 @@ function ciDataAvailability(org, dataAvailability, dbLevel) {
 
    dataAvailability.stockExchanges = org.stockExchanges && org.stockExchanges.length > 0;
 
-   if(dbLevel === 2) {
+   if(dataAvailability.blockIDs.companyinfo.level === 2) {
       org.registeredName ? dataAvailability.registeredName = true : dataAvailability.registeredName = false;
 
       dataAvailability.businessEntityType = org.businessEntityType 

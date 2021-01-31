@@ -38,19 +38,6 @@ function getDBsDocFrag(oDBs) {
       return null;
    }
 
-   //Parse the information contained in property blockIDs
-   oDBs.dbArr = dplDataBlocks.map(dbID => {
-      let oRet = {};
-
-      splitBlockIDs = dbID.split('_');
-
-      oRet.name = splitBlockIDs[0];
-      oRet.level = parseInt(splitBlockIDs[1].slice(-1), 10);
-      oRet.version = splitBlockIDs[2];
-
-      return oRet;
-   });
-   
    const org = oDBs.organization;
 
    //Escape if no organization property is available in the data block object
@@ -67,12 +54,19 @@ function getDBsDocFrag(oDBs) {
       return null;
    }
 
-   //All systems go ➡️ let's create a document fragment based on the data block info
-   const dbCompanyInfo = oDBs.dbArr.find(aDB => aDB.name === 'companyinfo');
-   const dbHierarchyConn = oDBs.dbArr.find(aDB => aDB.name === 'hierarchyconnections');
-
    //First check actual data availability
    let dataAvailability = {};
+
+   //Parse the information contained in property blockIDs
+   dataAvailability.blockIDs = {};
+
+   dplDataBlocks.forEach(dbID => {
+      splitBlockIDs = dbID.split('_');
+
+      dataAvailability.blockIDs[splitBlockIDs[0]] = {};
+      dataAvailability.blockIDs[splitBlockIDs[0]]['level'] = parseInt(splitBlockIDs[1].slice(-1), 10);
+      dataAvailability.blockIDs[splitBlockIDs[0]]['version'] = splitBlockIDs[2];
+   });
 
    //Check for the availability of the common data elements
    org.duns ? dataAvailability.duns = true : dataAvailability.duns = false;
@@ -81,8 +75,9 @@ function getDBsDocFrag(oDBs) {
                                  dataAvailability.countryISOAlpha2Code = false;
 
    //Check for the availability of specific properties in specific blocks
-   if(dbCompanyInfo) { ciDataAvailability(org, dataAvailability, dbCompanyInfo.level) }
-   if(dbHierarchyConn) { hcDataAvailability(org, dataAvailability) }
+   if(dataAvailability.blockIDs['companyinfo']) { ciDataAvailability(org, dataAvailability) }
+   if(dataAvailability.blockIDs['hierarchyconnections']) { hcDataAvailability(org, dataAvailability) }
+   if(dataAvailability.blockIDs['principalscontacts']) { pcDataAvailability(org, dataAvailability) }
 
    //Log the data availability
    console.log('\nAvailable data');
@@ -120,8 +115,9 @@ function getDBsDocFrag(oDBs) {
    retDocFrag.appendChild(tbl);
 
    //Add the sections to the document fragment
-   if(dbCompanyInfo) { createCiSections(org, dataAvailability, retDocFrag) }
-   if(dbHierarchyConn) { createHcSections(org, dataAvailability, retDocFrag) }
+   if(dataAvailability.blockIDs['companyinfo']) { createCiSections(org, dataAvailability, retDocFrag) }
+   if(dataAvailability.blockIDs['hierarchyconnections']) { createHcSections(org, dataAvailability, retDocFrag) }
+   if(dataAvailability.blockIDs['principalscontacts']) { createPcSections(org, dataAvailability, retDocFrag) }
 
    return retDocFrag;
 }
