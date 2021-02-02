@@ -1,0 +1,479 @@
+{
+  "transactionDetail": {
+    "transactionID": "rrt-0daa1ee1e57942d41-b-eu-15367-54191936-7",
+    "transactionTimestamp": "2021-02-02T09:35:23.845Z",
+    "inLanguage": "en-US"
+  },
+  "inquiryDetail": {
+    "duns": "407809623",
+    "blockIDs": [
+      "companyinfo_L2_v1",
+      "principalscontacts_L2_v1",
+      "hierarchyconnections_L1_v1"
+    ],
+    "tradeUp": "hq"
+  },
+  "organization": {
+    "businessEntityType": { "description": "Corporation", "dnbCode": 451 },
+    "countryISOAlpha2Code": "NL",
+    "duns": "407809623",
+    "incorporatedDate": "2007-12-05",
+    "dunsControlStatus": {
+      "operatingStatus": {
+        "description": "Active",
+        "dnbCode": 9074,
+        "startDate": null
+      },
+      "operatingSubStatus": {
+        "description": "Active",
+        "dnbCode": 9074,
+        "startDate": null
+      },
+      "isMarketable": false,
+      "isMailUndeliverable": false,
+      "isTelephoneDisconnected": null,
+      "isDelisted": true,
+      "subjectHandlingDetails": [
+        {
+          "description": "Do not call, mail or otherwise contact",
+          "dnbCode": 7976
+        }
+      ],
+      "firstReportDate": null,
+      "recordClass": {},
+      "isSelfRequestedDUNS": null,
+      "selfRequestDate": null
+    },
+    "isFortune1000Listed": null,
+    "isForbesLargestPrivateCompaniesListed": null,
+    "industryCodes": [
+      {
+        "code": "237310",
+        "description": "Highway, Street, and Bridge Construction",
+        "typeDescription": "North American Industry Classification System 2017",
+        "typeDnBCode": 30832,
+        "priority": 1
+      },
+      {
+        "code": "16220000",
+        "description": "Bridge, tunnel, and elevated highway construction",
+        "typeDescription": "D&B Standard Industry Code",
+        "typeDnBCode": 3599,
+        "priority": 1
+      },
+      {
+        "code": "4213",
+        "description": "Construction of bridges and tunnels",
+        "typeDescription": "NACE Revision 2",
+        "typeDnBCode": 29104,
+        "priority": 1
+      },
+      {
+        "code": "1622",
+        "description": "Bridge/tunnel construction",
+        "typeDescription": "US Standard Industry Code 1987 - 4 digit",
+        "typeDnBCode": 399,
+        "priority": 1
+      },
+      {
+        "code": "1891",
+        "description": "Highway, Street & Bridge Construction Contractors",
+        "typeDescription": "D&B Hoovers Industry Code",
+        "typeDnBCode": 25838,
+        "priority": 1
+      },
+      {
+        "code": "1622",
+        "description": "Bridge tunnel and elevated highway construction",
+        "typeDescription": "US Standard Industry Code 1972 - 4 digit (European version)",
+        "typeDnBCode": 1016,
+        "priority": 1
+      },
+      {
+        "code": "C",
+        "description": "Construction",
+        "typeDescription": "D&B Standard Major Industry Code",
+        "typeDnBCode": 24657,
+        "priority": 1
+      }
+    ],
+    "registrationNumbers": [
+      {
+        "registrationNumber": "NL123214111B01",
+        "typeDescription": "Value Added Tax Number (NL)",
+        "typeDnBCode": 6273,
+        "isPreferredRegistrationNumber": null
+      },
+      {
+        "registrationNumber": "123214111",
+        "typeDescription": "Legal Entity and Partnership Information Number (NL)",
+        "typeDnBCode": 23097,
+        "isPreferredRegistrationNumber": null
+      },
+      {
+        "registrationNumber": "27654321",
+        "typeDescription": "Trade Register Number (NL)",
+        "typeDnBCode": 6256,
+        "isPreferredRegistrationNumber": true
+      },
+      {
+        "registrationNumber": "001232140000",
+        "typeDescription": "Branch Unit Number (NL)",
+        "typeDnBCode": 23096,
+        "isPreferredRegistrationNumber": null
+      }
+    ],
+    "isNonClassifiedEstablishment": null,
+    "activities": [
+      {
+        "description": "Het aanleggen van bruggen, tunnels en verhoogde snelwegen.",
+        "language": { "description": "Dutch", "dnbCode": 38 }
+      }
+    ],
+    "controlOwnershipType": {
+      "description": "Publicly Traded Company",
+      "dnbCode": 9057
+    },
+    "primaryIndustryCode": {
+      "usSicV4": "1622",
+      "usSicV4Description": "Bridge/tunnel construction"
+    },
+    "primaryName": "Agglo-Bouw Voorbeeld B.V.",
+    "defaultCurrency": "EUR",
+    "startDate": "2020-08-13",
+    "email": [{ "address": "testcase@agglobouw.nl" }],
+    "financials": [
+      {
+        "financialStatementToDate": "2014-12-31",
+        "financialStatementDuration": null,
+        "informationScopeDescription": "Individual",
+        "informationScopeDnBCode": 9066,
+        "reliabilityDescription": "Actual",
+        "reliabilityDnBCode": 9092,
+        "unitCode": "Single Units",
+        "yearlyRevenue": [
+          { "value": 6.2114e7, "currency": "EUR" },
+          { "value": 7.7246585e7, "currency": "USD" }
+        ]
+      }
+    ],
+    "unspscCodes": [
+      {
+        "code": "72000000",
+        "description": "Building and Facility Construction and Maintenance Services",
+        "priority": 1
+      }
+    ],
+    "stockExchanges": [
+      {
+        "tickerName": "Euronext Amsterdam:XYZ",
+        "exchangeName": { "description": "Euronext Amsterdam" },
+        "isPrimary": true
+      },
+      {
+        "tickerName": "LSE:0XYZ",
+        "exchangeName": { "description": "LSE" },
+        "isPrimary": null
+      },
+      {
+        "tickerName": "Munich:XYZ2",
+        "exchangeName": { "description": "Munich" },
+        "isPrimary": null
+      }
+    ],
+    "numberOfEmployees": [
+      {
+        "value": 369,
+        "employeeFiguresDate": null,
+        "informationScopeDescription": "HQ only (here)",
+        "informationScopeDnBCode": 9068,
+        "reliabilityDescription": "Estimated",
+        "reliabilityDnBCode": 9093,
+        "employeeCategories": [],
+        "trend": []
+      },
+      {
+        "value": 359,
+        "employeeFiguresDate": null,
+        "informationScopeDescription": "Consolidated",
+        "informationScopeDnBCode": 9067,
+        "reliabilityDescription": "Actual",
+        "reliabilityDnBCode": 9092,
+        "employeeCategories": []
+      }
+    ],
+    "principalsSummary": {
+      "currentPrincipalsCount": 3,
+      "otherAssociationsCount": 2,
+      "inactiveAssociationsCount": 0,
+      "detrimentalPrincipalsCount": 0,
+      "detrimentalPrincipalsPercentage": 0.0
+    },
+    "controlOwnershipDate": "2007-12-06",
+    "isStandalone": false,
+    "legalForm": {
+      "description": "Limited Liability Company",
+      "dnbCode": 31169,
+      "startDate": "2007-12-05",
+      "registrationLocation": {}
+    },
+    "telephone": [{ "telephoneNumber": "123456789", "isdCode": "31" }],
+    "mostSeniorPrincipals": [
+      {
+        "givenName": "L.",
+        "middleName": null,
+        "familyName": "Nilis",
+        "fullName": "L. Nilis",
+        "namePrefix": null,
+        "nameSuffix": null,
+        "gender": {},
+        "jobTitles": [{ "title": "Registered Principal" }],
+        "managementResponsibilities": [
+          { "description": "Principal", "mrcCode": "B1R2" }
+        ],
+        "idNumbers": [
+          {
+            "idNumber": "200010123456",
+            "idType": {
+              "description": "Local country NIKE subject identifier",
+              "dnbCode": 189
+            }
+          }
+        ]
+      }
+    ],
+    "currentPrincipals": [
+      {
+        "givenName": "Wilfried",
+        "middleName": "Guemiand",
+        "familyName": "Bony",
+        "fullName": "Wilfried Guemiand Bony",
+        "namePrefix": null,
+        "nameSuffix": null,
+        "gender": {},
+        "jobTitles": [{ "title": "Director" }],
+        "managementResponsibilities": [
+          { "description": "Director", "mrcCode": "Z699" }
+        ],
+        "idNumbers": [
+          {
+            "idNumber": "200017654321",
+            "idType": {
+              "description": "Local country NIKE subject identifier",
+              "dnbCode": 189
+            }
+          }
+        ]
+      },
+      {
+        "givenName": "Theo",
+        "middleName": null,
+        "familyName": "Janssen",
+        "fullName": "Theo Janssen",
+        "namePrefix": null,
+        "nameSuffix": null,
+        "gender": { "description": "Male", "dnbCode": 190 },
+        "jobTitles": [{ "title": "Director" }],
+        "managementResponsibilities": [
+          { "description": "Director", "mrcCode": "Z699" }
+        ],
+        "idNumbers": [
+          {
+            "idNumber": "200008098765",
+            "idType": {
+              "description": "Local country NIKE subject identifier",
+              "dnbCode": 189
+            }
+          }
+        ]
+      },
+      {
+        "givenName": null,
+        "middleName": null,
+        "familyName": null,
+        "fullName": "Agglo Holding Netherlands",
+        "namePrefix": null,
+        "nameSuffix": null,
+        "gender": {},
+        "jobTitles": [{ "title": "Director" }],
+        "managementResponsibilities": [
+          { "description": "Director", "mrcCode": "Z699" }
+        ],
+        "idNumbers": [
+          {
+            "idNumber": "400000078965",
+            "idType": {
+              "description": "Local country NIKE subject identifier",
+              "dnbCode": 189
+            }
+          }
+        ]
+      }
+    ],
+    "registeredDetails": {
+      "legalForm": {
+        "description": "NV Normal Structure",
+        "dnbCode": 6163,
+        "registrationStatus": {}
+      }
+    },
+    "isAgent": null,
+    "isImporter": null,
+    "isExporter": null,
+    "isSmallBusiness": null,
+    "registeredName": "Agglo-Bouw Voorbeeld B.V.",
+    "organizationSizeCategory": { "description": "Large", "dnbCode": 20547 },
+    "tradeStyleNames": [
+      { "name": "Agglo bouw", "priority": 1 },
+      { "name": "Agglo Projectontwikkeling", "priority": 2 }
+    ],
+    "mailingAddress": {
+      "language": {
+        "description": "Dutch",
+        "dnbCode": 38
+      },
+      "addressCountry": {
+        "name": "Netherlands",
+        "isoAlpha2Code": "NL"
+      },
+      "continentalRegion": {
+        "name": "Europe"
+      },
+      "addressLocality": {
+        "name": "Hoek van Holland"
+      },
+      "minorTownName": null,
+      "addressRegion": {
+        "name": "Zuid-Holland",
+        "abbreviatedName": null
+      },
+      "addressCounty": {
+        "name": "Zuid-Holland"
+      },
+      "postalCode": "3150 AB",
+      "postalCodePosition": {
+        "description": "Post Code presented before Town/City name",
+        "dnbCode": 1009
+      },
+      "postalRoute": null,
+      "streetNumber": null,
+      "streetName": null,
+      "streetAddress": {
+        "line1": "Postbus 654",
+        "line2": null
+      },
+      "postOfficeBox": {
+        "postOfficeBoxNumber": "654",
+        "typeDescription": "Post Office Box (Supplied by public Post Office authority.)",
+        "typeDnBCode": 120
+      }
+    },
+    "charterType": {},
+    "registeredAddress": {
+      "language": { "description": "Dutch", "dnbCode": 38 },
+      "addressCountry": { "name": "Netherlands", "isoAlpha2Code": "NL" },
+      "addressLocality": { "name": "Hoek van Holland" },
+      "minorTownName": null,
+      "addressRegion": { "name": "Zuid-Holland", "abbreviatedName": null },
+      "addressCounty": {},
+      "postalCode": "3151 TW",
+      "postalCodePosition": {
+        "description": "Post Code presented before Town/City name",
+        "dnbCode": 1009
+      },
+      "streetNumber": "274",
+      "streetName": "'s-Gravenzandseweg",
+      "streetAddress": {},
+      "postOfficeBox": {}
+    },
+    "websiteAddress": [
+      { "url": "www.agglobouw.nl", "domainName": "agglobouw.nl" }
+    ],
+    "banks": [
+      {
+        "name": "SNS Bank Nederland NV",
+        "telephone": [],
+        "address": {},
+        "registrationNumbers": []
+      },
+      { "name": "ABN AMRO Bank NV" }
+    ],
+    "primaryAddress": {
+      "language": { "description": "Dutch", "dnbCode": 38 },
+      "addressCountry": { "name": "Netherlands", "isoAlpha2Code": "NL" },
+      "continentalRegion": { "name": "Europe" },
+      "addressLocality": { "name": "Hoek van Holland" },
+      "minorTownName": null,
+      "addressRegion": { "name": "ZUID-HOLLAND", "abbreviatedName": null },
+      "addressCounty": {},
+      "streetAddress": { "line1": "'s-Gravenzandseweg 274", "line2": null },
+      "postalCode": "3151 TW",
+      "postalCodePosition": {
+        "description": "Post Code presented before Town/City name",
+        "dnbCode": 1009
+      },
+      "streetNumber": "274",
+      "streetName": "'s-Gravenzandseweg",
+      "postOfficeBox": {},
+      "isRegisteredAddress": true,
+      "latitude": 51.985767,
+      "longitude": 4.125759,
+      "geographicalPrecision": {
+        "description": "Street Address Centroid",
+        "dnbCode": 30257
+      },
+      "statisticalArea": {},
+      "isManufacturingLocation": null
+    },
+    "corporateLinkage": {
+      "familytreeRolesPlayed": [
+        { "description": "Subsidiary", "dnbCode": 9159 }
+      ],
+      "hierarchyLevel": 2,
+      "globalUltimateFamilyTreeMembersCount": 4,
+      "globalUltimate": {
+        "duns": "282823332",
+        "primaryName": "Agglo Worldwide SA",
+        "primaryAddress": {
+          "addressCountry": { "name": "Belgium", "isoAlpha2Code": "BE" },
+          "continentalRegion": { "name": "Europe" },
+          "addressLocality": { "name": "Bruxelles" },
+          "addressRegion": {},
+          "postalCode": "1070",
+          "streetAddress": { "line1": "Rue Gheude 56", "line2": null }
+        }
+      },
+      "domesticUltimate": {
+        "duns": "409525869",
+        "primaryName": "Agglo Holding Netherlands",
+        "primaryAddress": {
+          "addressCountry": { "name": "Netherlands", "isoAlpha2Code": "NL" },
+          "continentalRegion": { "name": "Europe" },
+          "addressLocality": { "name": "Rotterdam" },
+          "addressRegion": { "name": "ZUID-HOLLAND", "abbreviatedName": null },
+          "postalCode": "3072 MD",
+          "streetAddress": { "line1": "Otto Reuchlinweg 1028", "line2": null }
+        }
+      },
+      "parent": {
+        "duns": "409525979",
+        "primaryName": "Agglo Civil Engineering",
+        "primaryAddress": {
+          "addressCountry": { "name": "Netherlands", "isoAlpha2Code": "NL" },
+          "continentalRegion": { "name": "Europe" },
+          "addressLocality": { "name": "Ridderkerk" },
+          "addressRegion": { "name": "ZUID-HOLLAND", "abbreviatedName": null },
+          "postalCode": "2983 GS",
+          "streetAddress": { "line1": "Ringdijk 458", "line2": null }
+        }
+      },
+      "headQuarter": {}
+    }
+  },
+  "blockStatus": [
+    { "blockID": "companyinfo_L2_v1", "status": "ok", "reason": null },
+    { "blockID": "principalscontacts_L2_v1", "status": "ok", "reason": null },
+    { "blockID": "hierarchyconnections_L1_v1", "status": "ok", "reason": null },
+    { "blockID": "baseinfo_L1_v1", "status": "ok", "reason": null }
+  ]
+}

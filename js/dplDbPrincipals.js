@@ -23,8 +23,14 @@
 
 //Check for the availability of important properties in the
 //Principals & Contacts Data Block
-function pcDataAvailability(org, dataAvailability, dbLevel) {
+function pcDataAvailability(org, dataAvailability) {
    dataAvailability.mostSeniorPrincipals = org.mostSeniorPrincipals && org.mostSeniorPrincipals.length > 0;
+
+   if(dataAvailability.blockIDs.principalscontacts.level > 1) { //Level 2 & higher
+      dataAvailability.principalsSummary = org.principalsSummary && !bObjIsEmpty(org.principalsSummary);
+
+      dataAvailability.currentPrincipals = org.currentPrincipals && org.currentPrincipals.length > 0;
+   }
 }
 
 //DOM code to convert the principals & contacts data in a JavaScript
@@ -48,10 +54,10 @@ function createPcSections(org, dataAvailability, retDocFrag) {
 
       let sMsg = ' is available';
    
-      console.log(oPDA.namePrefix ? 'A name prefix' : 'No name prefix' + sMsg);
-      console.log(oPDA.nameSuffix ? 'A name suffix' : 'No name suffix' + sMsg);
+      console.log((oPDA.namePrefix ? 'A name prefix' : 'No name prefix') + sMsg);
+      console.log((oPDA.nameSuffix ? 'A name suffix' : 'No name suffix') + sMsg);
 
-      console.log(oPDA.gender ? 'Gender' : 'No gender' + sMsg);
+      console.log((oPDA.gender ? 'Gender' : 'No gender') + sMsg);
 
       if(oPDA.jobTitles) {
          console.log('Job title count is ' + oPrincipal.jobTitles.length)
@@ -144,17 +150,51 @@ function createPcSections(org, dataAvailability, retDocFrag) {
          addBasicDBsTblRow(tbody, 'Mngmt responsibilities', oPrincipal.managementResponsibilities.map(oMR => oMR.description))
       }
 
-      if(typeof mostSenior === 'boolean') {
-         addBasicDBsTblRow(tbody, 'Is most senior?', mostSenior ? 'Yes' : 'No')
+      if(mostSenior) {
+         addBasicDBsTblRow(tbody, 'Most senior?', mostSenior ? 'Yes' : 'No')
       }
    
       retDocFrag.appendChild(tbl);
    }
 
+   //Add a bit of general information about principals
+   if(dataAvailability.principalsSummary) { //Level 2 & higher
+      console.log('Section \"Principal summary\" will be created');
+
+      tbl = getBasicDBsTbl('Principal summary');
+      tbody = tbl.appendChild(document.createElement('tbody'));
+
+      if(typeof org.principalsSummary.currentPrincipalsCount === 'number') {
+         addBasicDBsTblRow(tbody, 'Current principals count', org.principalsSummary.currentPrincipalsCount.toString())
+      }
+      if(typeof org.principalsSummary.otherAssociationsCount === 'number') {
+         addBasicDBsTblRow(tbody, 'Other associations count', org.principalsSummary.otherAssociationsCount.toString())
+      }
+      if(typeof org.principalsSummary.inactiveAssociationsCount === 'number') {
+         addBasicDBsTblRow(tbody, 'Inactive associations count', org.principalsSummary.inactiveAssociationsCount.toString())
+      }
+      if(typeof org.principalsSummary.detrimentalPrincipalsCount === 'number') {
+         addBasicDBsTblRow(tbody, 'Detrimental principals count', org.principalsSummary.detrimentalPrincipalsCount.toString())
+      }
+      if(typeof org.principalsSummary.detrimentalPrincipalsPercentage === 'number') {
+         addBasicDBsTblRow(tbody, 'Detrimental principals perc.', org.principalsSummary.detrimentalPrincipalsPercentage + '%')
+      }
+
+      retDocFrag.appendChild(tbl);
+   }
+   else {
+      console.log('No data available for section \"Principal summary\", it will not be created');
+   }
+   
    //Add most senior principal(s) information to the page
    if(dataAvailability.mostSeniorPrincipals) {
       let mostSeniorPrincipalToDOM = principalToDOM.bind(null, true);
+      org.mostSeniorPrincipals.forEach(mostSeniorPrincipalToDOM);
+   }
 
-      org.mostSeniorPrincipals.forEach(mostSeniorPrincipalToDOM)
+   //Add most senior principal(s) information to the page
+   if(dataAvailability.currentPrincipals) { //Level 2 & higher
+      let currentPrincipalsToDOM = principalToDOM.bind(null, false);
+      org.currentPrincipals.forEach(currentPrincipalsToDOM);
    }
 }
