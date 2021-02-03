@@ -39,7 +39,7 @@ function createPcSections(org, dataAvailability, retDocFrag) {
    let tbl, tbody;
 
    //Log principal data availability availability
-   function logPrincipalDataAvailability(oPrincipal, oPDA) {
+   function logPrincipalDataAvailability(oPrincipal, oPDA, dbLevel) {
       if(oPDA.fullName) {
          console.log('Data availability for principal ' + oPrincipal.fullName)
       }
@@ -80,11 +80,21 @@ function createPcSections(org, dataAvailability, retDocFrag) {
          console.log('No IDs available for the principal')
       }
 
+      if(dbLevel > 2) {
+         console.log((oPDA.subjectType ? 'A subject type' : 'No subject type') + sMsg);
+
+         console.log((oPDA.birthDate ? 'Date of birth' : 'No date of birth') + sMsg);
+
+         console.log((oPDA.nationality ? 'Nationality' : 'No nationality') + sMsg);
+
+         console.log((oPDA.responsibleAreas ? 'Areas' : 'No areas') + ' of responsibility available');
+      }
+
       console.log();
    }
 
    //Record principal data availability availability
-   function principalDataAvailability(oPrincipal) {
+   function principalDataAvailability(oPrincipal, dbLevel) {
       let oPrinDataAvail = {};
 
       //Property fullName
@@ -111,17 +121,29 @@ function createPcSections(org, dataAvailability, retDocFrag) {
                                                       oPrincipal.managementResponsibilities.length > 0;
       oPrinDataAvail.idNumbers = oPrincipal.idNumbers && oPrincipal.idNumbers.length > 0;
 
-      logPrincipalDataAvailability(oPrincipal, oPrinDataAvail);
+      //Level 3 elements
+      if(dbLevel > 2) {
+         oPrinDataAvail.subjectType = oPrincipal.subjectType && oPrincipal.subjectType.length > 0;
+
+         oPrinDataAvail.birthDate = oPrincipal.birthDate && oPrincipal.birthDate.length > 0;
+
+         oPrinDataAvail.nationality = oPrincipal.nationality && oPrincipal.nationality.name;
+
+         oPrinDataAvail.responsibleAreas = oPrincipal.responsibleAreas && 
+                                                oPrincipal.responsibleAreas.length > 0;
+      }
+
+      logPrincipalDataAvailability(oPrincipal, oPrinDataAvail, dbLevel);
 
       return oPrinDataAvail;
    }
 
    //Convert principal data to HTML table
-   function principalToDOM(mostSenior, oPrincipal) {
+   function principalToDOM(mostSenior, dbLevel, oPrincipal) {
       console.log('Section \"Principal\" will be created');
 
       //Determine data availability for the principal passed in
-      let oPDA = principalDataAvailability(oPrincipal);
+      let oPDA = principalDataAvailability(oPrincipal, dbLevel);
 
       tbl = getBasicDBsTbl('Principal');
       tbody = tbl.appendChild(document.createElement('tbody'));
@@ -139,15 +161,27 @@ function createPcSections(org, dataAvailability, retDocFrag) {
          addBasicDBsTblRow(tbody, 'Full name', sFullName)
       }
 
+      if(oPDA.subjectType && oPrincipal.subjectType !== 'Individuals') { //Level 3 & higher
+         addBasicDBsTblRow(tbody, 'Subject type', 'Legal entity')
+      }
+
       if(oPDA.namePrefix) { addBasicDBsTblRow(tbody, 'Name prefix', oPrincipal.namePrefix) }
       if(oPDA.nameSuffix) { addBasicDBsTblRow(tbody, 'Name suffix', oPrincipal.nameSuffix) }
 
       if(oPDA.gender) { addBasicDBsTblRow(tbody, 'Gender', oPrincipal.gender.description) }
 
+      if(oPDA.birthDate) { addBasicDBsTblRow(tbody, 'Date of birth', oPrincipal.birthDate) } //Level 3 & higher
+
+      if(oPDA.nationality) { addBasicDBsTblRow(tbody, 'Nationality', oPrincipal.nationality.name) } //Level 3 & higher
+
       if(oPDA.jobTitles) { addBasicDBsTblRow(tbody, 'Job title(s)', oPrincipal.jobTitles.map(oJT => oJT.title)) }
 
       if(oPDA.managementResponsibilities) {
          addBasicDBsTblRow(tbody, 'Mngmt responsibilities', oPrincipal.managementResponsibilities.map(oMR => oMR.description))
+      }
+
+      if(oPDA.responsibleAreas) { //Level 3 & higher
+         addBasicDBsTblRow(tbody, 'Areas of responsibility', oPrincipal.responsibleAreas.map(oAR => oAR.description))
       }
 
       if(mostSenior) {
@@ -188,13 +222,13 @@ function createPcSections(org, dataAvailability, retDocFrag) {
    
    //Add most senior principal(s) information to the page
    if(dataAvailability.mostSeniorPrincipals) {
-      let mostSeniorPrincipalToDOM = principalToDOM.bind(null, true);
+      let mostSeniorPrincipalToDOM = principalToDOM.bind(null, true, dataAvailability.blockIDs.principalscontacts.level);
       org.mostSeniorPrincipals.forEach(mostSeniorPrincipalToDOM);
    }
 
    //Add most senior principal(s) information to the page
    if(dataAvailability.currentPrincipals) { //Level 2 & higher
-      let currentPrincipalsToDOM = principalToDOM.bind(null, false);
+      let currentPrincipalsToDOM = principalToDOM.bind(null, false, dataAvailability.blockIDs.principalscontacts.level);
       org.currentPrincipals.forEach(currentPrincipalsToDOM);
    }
 }
