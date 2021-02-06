@@ -50,28 +50,6 @@ function hcDataAvailability(org, dataAvailability) {
 function createHcSections(org, dataAvailability, retDocFrag) {
    let tbl, tbody;
 
-   //Company Information address object conversion
-   function getHcAddr(oAddr) {
-      let arrAddr = [], str = '';
-
-      if(!oAddr) {return arrAddr}
-
-      //Primary address
-      if(oAddr.streetAddress) {
-         if(oAddr.streetAddress.line1) {arrAddr.push(oAddr.streetAddress.line1)}
-         if(oAddr.streetAddress.line2) {arrAddr.push(oAddr.streetAddress.line2)}
-      }
-
-      //Postalcode & city
-      if(oAddr.postalCode) {str = oAddr.postalCode}
-      if(oAddr.addressLocality) {str.length > 0 ? str += ' ' + oAddr.addressLocality.name : str = oAddr.addressLocality.name}
-      if(str.length > 0) {arrAddr.push(str)}
-
-      if(oAddr.addressCountry && oAddr.addressCountry.name) {arrAddr.push(oAddr.addressCountry.name)}
-
-      return arrAddr;
-   }
-
    //Add high level corporate hierarchy information section to the page
    if(['familytreeRolesPlayed', 'hierarchyLevel', 'globalUltimateFamilyTreeMembersCount'].some(elem => dataAvailability[elem])) {
       console.log('Section \"Corporate hierarchy information\" will be created');
@@ -168,7 +146,7 @@ function createHcSections(org, dataAvailability, retDocFrag) {
          addBasicDBsTblRow(tbody, 'Primary name', oSection.obj.primaryName)
       }
       if(oSection.obj.primaryAddress) {
-         addBasicDBsTblRow(tbody, 'Primary address', getHcAddr(oSection.obj.primaryAddress))
+         addBasicDBsTblRow(tbody, 'Primary address', getArrAddr(oSection.obj.primaryAddress))
       }
       
       retDocFrag.appendChild(tbl);

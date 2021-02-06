@@ -83,11 +83,20 @@ function createPcSections(org, dataAvailability, retDocFrag) {
       if(dbLevel > 2) {
          console.log((oPDA.subjectType ? 'A subject type' : 'No subject type') + sMsg);
 
+         console.log((oPDA.primaryAddress ? 'Primary address' : 'No primary address') + sMsg);
+
          console.log((oPDA.birthDate ? 'Date of birth' : 'No date of birth') + sMsg);
 
          console.log((oPDA.nationality ? 'Nationality' : 'No nationality') + sMsg);
 
          console.log((oPDA.responsibleAreas ? 'Areas' : 'No areas') + ' of responsibility available');
+
+         if(oPDA.isSigningAuthority) {
+            console.log('Principal has signing authority');
+         }
+         else {
+            console.log('Principal has no or unknown signing authority');
+         }
       }
 
       console.log();
@@ -125,12 +134,17 @@ function createPcSections(org, dataAvailability, retDocFrag) {
       if(dbLevel > 2) {
          oPrinDataAvail.subjectType = oPrincipal.subjectType && oPrincipal.subjectType.length > 0;
 
+         oPrinDataAvail.primaryAddress = oPrincipal.primaryAddress && 
+                                             !bObjIsEmpty(oPrincipal.primaryAddress);
+
          oPrinDataAvail.birthDate = oPrincipal.birthDate && oPrincipal.birthDate.length > 0;
 
          oPrinDataAvail.nationality = oPrincipal.nationality && oPrincipal.nationality.name;
 
          oPrinDataAvail.responsibleAreas = oPrincipal.responsibleAreas && 
                                                 oPrincipal.responsibleAreas.length > 0;
+
+         oPrinDataAvail.isSigningAuthority = Boolean(oPrincipal.isSigningAuthority);
       }
 
       logPrincipalDataAvailability(oPrincipal, oPrinDataAvail, dbLevel);
@@ -168,6 +182,20 @@ function createPcSections(org, dataAvailability, retDocFrag) {
       if(oPDA.namePrefix) { addBasicDBsTblRow(tbody, 'Name prefix', oPrincipal.namePrefix) }
       if(oPDA.nameSuffix) { addBasicDBsTblRow(tbody, 'Name suffix', oPrincipal.nameSuffix) }
 
+      if(oPDA.idNumbers) {
+         const idDUNS = oPrincipal.idNumbers.filter(oID => 
+            oID.idType && oID.idType.dnbCode && oID.idType.dnbCode === 3575
+         );
+
+         if(idDUNS && idDUNS.length > 0) {
+            addBasicDBsTblRow(tbody, 'DUNS', idDUNS[0].idNumber)
+         }
+      }
+
+      if(oPDA.primaryAddress) { //Level 3 & higher
+         addBasicDBsTblRow(tbody, 'Primary address', getArrAddr(oPrincipal.primaryAddress))
+      }
+
       if(oPDA.gender) { addBasicDBsTblRow(tbody, 'Gender', oPrincipal.gender.description) }
 
       if(oPDA.birthDate) { addBasicDBsTblRow(tbody, 'Date of birth', oPrincipal.birthDate) } //Level 3 & higher
@@ -184,8 +212,12 @@ function createPcSections(org, dataAvailability, retDocFrag) {
          addBasicDBsTblRow(tbody, 'Areas of responsibility', oPrincipal.responsibleAreas.map(oAR => oAR.description))
       }
 
+      if(oPDA.isSigningAuthority) { //Level 3 & higher
+         addBasicDBsTblRow(tbody, 'Signing authority', 'Yes')
+      }
+
       if(mostSenior) {
-         addBasicDBsTblRow(tbody, 'Most senior?', mostSenior ? 'Yes' : 'No')
+         addBasicDBsTblRow(tbody, 'Most senior?', 'Yes')
       }
    
       retDocFrag.appendChild(tbl);

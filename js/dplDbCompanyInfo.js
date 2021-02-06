@@ -86,47 +86,6 @@ function ciDataAvailability(org, dataAvailability) {
 function createCiSections(org, dataAvailability, retDocFrag) {
    let tbl, tbody;
 
-   //Company Information address object conversion
-   function getCiAddr(oAddr) {
-      let arrAddr = [], str = '';
-
-      if(!oAddr) {return arrAddr}
-
-      //Street address
-      if(oAddr.streetAddress) {
-         if(oAddr.streetAddress.line1) {arrAddr.push(oAddr.streetAddress.line1)}
-         if(oAddr.streetAddress.line2) {arrAddr.push(oAddr.streetAddress.line2)}
-      }
-
-      //Refer to alternative properties if streetAddress doesn't contain info
-      if(arrAddr.length === 0) {
-         if(oAddr.streetName) {
-            str = oAddr.streetName;
-      
-            if(oAddr.streetNumber) {
-               str += ' ' + oAddr.streetNumber
-            }
-
-            arrAddr.push(str);
-
-            str = '';
-         }
-      }
-
-      //Postalcode & city
-      if(oAddr.postalCode) {str = oAddr.postalCode}
-      if(oAddr.addressLocality) {str.length > 0 ? str += ' ' + oAddr.addressLocality.name : str = oAddr.addressLocality.name}
-      if(str.length > 0) {arrAddr.push(str)}
-
-      if(oAddr.addressCountry && oAddr.addressCountry.name) {arrAddr.push(oAddr.addressCountry.name)}
-
-      if(oAddr.isRegisteredAddress) {
-         arrAddr.push('Entity registered at this address');
-      }
-
-      return arrAddr;
-   }
-
    //Company Info telephone object conversion
    function getCiTel(oTel) {
       return (oTel.isdCode ? '+' + oTel.isdCode + ' ' : '') + oTel.telephoneNumber
@@ -315,11 +274,11 @@ function createCiSections(org, dataAvailability, retDocFrag) {
 
       tbl = getBasicDBsTbl('Address');
       tbody = tbl.appendChild(document.createElement('tbody'));
-      if(dataAvailability.primaryAddress) {addBasicDBsTblRow(tbody, 'Primary address', getCiAddr(org.primaryAddress))}
+      if(dataAvailability.primaryAddress) {addBasicDBsTblRow(tbody, 'Primary address', getArrAddr(org.primaryAddress))}
       if(dataAvailability.registeredAddress && !(dataAvailability.primaryAddress && org.primaryAddress.isRegisteredAddress)) {
-         addBasicDBsTblRow(tbody, 'Registered address', getCiAddr(org.registeredAddress)); //Level 2
+         addBasicDBsTblRow(tbody, 'Registered address', getArrAddr(org.registeredAddress)); //Level 2
       }
-      if(dataAvailability.mailingAddress) {addBasicDBsTblRow(tbody, 'Mail address', getCiAddr(org.mailingAddress))} //Level 2
+      if(dataAvailability.mailingAddress) {addBasicDBsTblRow(tbody, 'Mail address', getArrAddr(org.mailingAddress))} //Level 2
 
       retDocFrag.appendChild(tbl);
    }

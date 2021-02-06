@@ -1,0 +1,188 @@
+{
+  "transactionDetail": {
+    "transactionID": "rrt-097c1ff912c8673f5-a-eu-22559-53777059-52",
+    "transactionTimestamp": "2021-02-02T07:33:28.622Z",
+    "inLanguage": "en-US"
+  },
+  "inquiryDetail": {
+    "duns": "407809623",
+    "blockIDs": ["principalscontacts_L3_v1"],
+    "tradeUp": "hq"
+  },
+  "organization": {
+    "countryISOAlpha2Code": "NL",
+    "duns": "407809623",
+    "principalsSummary": {
+      "currentPrincipalsCount": 3,
+      "otherAssociationsCount": 2,
+      "inactiveAssociationsCount": 0,
+      "detrimentalPrincipalsCount": 0,
+      "detrimentalPrincipalsPercentage": 0.0
+    },
+    "mostSeniorPrincipals": [
+      {
+        "subjectType": "Individuals",
+        "birthDate": null,
+        "givenName": "L.",
+        "middleName": null,
+        "familyName": "Nilis",
+        "fullName": "L. Nilis",
+        "namePrefix": null,
+        "nameSuffix": null,
+        "nationality": {},
+        "gender": {},
+        "primaryAddress": {},
+        "responsibleAreas": {},
+        "jobTitles": [{ "title": "Registered Principal" }],
+        "managementResponsibilities": [
+          { "description": "Principal", "mrcCode": "B1R2" }
+        ],
+        "idNumbers": [
+          {
+            "idNumber": "200010123456",
+            "idType": {
+              "description": "Local country NIKE subject identifier",
+              "dnbCode": 189
+            }
+          }
+        ],
+        "isSigningAuthority": null
+      }
+    ],
+    "currentPrincipals": [
+      {
+        "subjectType": "Individuals",
+        "birthDate": "1988-12-10",
+        "givenName": "Wilfried",
+        "middleName": "Guemiand",
+        "familyName": "Bony",
+        "fullName": "Wilfried Guemiand Bony",
+        "namePrefix": null,
+        "nameSuffix": null,
+        "nationality": {"isoAlpha2Code": "CI", "name": "Côte d'Ivoire"},
+        "gender": {},
+        "primaryAddress": {},
+        "responsibleAreas": [
+          { "description": "Joint signing authority", "dnbCode": 6308 }
+        ],
+        "jobTitles": [{ "title": "Director" }],
+        "managementResponsibilities": [
+          { "description": "Director", "mrcCode": "Z699" }
+        ],
+        "idNumbers": [
+          {
+            "idNumber": "200017654321",
+            "idType": {
+              "description": "Local country NIKE subject identifier",
+              "dnbCode": 189
+            }
+          }
+        ],
+        "isSigningAuthority": true
+      },
+      {
+        "subjectType": "Individuals",
+        "birthDate": "1981-07-27",
+        "givenName": "Theo",
+        "middleName": null,
+        "familyName": "Janssen",
+        "fullName": "Theo Janssen",
+        "namePrefix": null,
+        "nameSuffix": null,
+        "nationality": {},
+        "gender": { "description": "Male", "dnbCode": 190 },
+        "primaryAddress": {},
+        "responsibleAreas": [
+          { "description": "Joint signing authority", "dnbCode": 6308 }
+        ],
+        "jobTitles": [{ "title": "Director" }],
+        "managementResponsibilities": [
+          { "description": "Director", "mrcCode": "Z699" }
+        ],
+        "idNumbers": [
+          {
+            "idNumber": "200008098765",
+            "idType": {
+              "description": "Local country NIKE subject identifier",
+              "dnbCode": 189
+            }
+          }
+        ],
+        "isSigningAuthority": true
+      },
+      {
+        "subjectType": "Businesses",
+        "birthDate": "2006-02-03",
+        "givenName": null,
+        "middleName": null,
+        "familyName": null,
+        "fullName": "Agglo Holding Netherlands",
+        "namePrefix": null,
+        "nameSuffix": null,
+        "nationality": {},
+        "gender": {},
+        "primaryAddress": {},
+        "responsibleAreas": [
+            {
+                "description": "Sole signing authority",
+                "dnbCode": 6309
+            }
+        ],
+        "jobTitles": [{ "title": "Director" }],
+        "managementResponsibilities": [
+          { "description": "Director", "mrcCode": "Z699" }
+        ],
+        "idNumbers": [
+          {
+            "idNumber": "12345678",
+            "idType": {
+                "description": "Trade Register Number",
+                "dnbCode": 6256
+            }
+          },
+          {
+              "idNumber": "815654321",
+              "idType": {
+                  "description": "VAT Number",
+                  "dnbCode": 6273
+              }
+          },
+          {
+              "idNumber": "815654321",
+              "idType": {
+                  "description": "RSIN",
+                  "dnbCode": 23097
+              }
+          },
+          {
+              "idNumber": "000007896543",
+              "idType": {
+                  "description": "Branch Unit Number",
+                  "dnbCode": 23096
+              }
+          },
+          {
+              "idNumber": "409525869",
+              "idType": {
+                  "description": "D-U-N-S Number",
+                  "dnbCode": 3575
+              }
+          },
+          {
+              "idNumber": "200005987654",
+              "idType": {
+                  "description": "Local country NIKE subject identifier",
+                  "dnbCode": 189
+              }
+          }
+        ],
+        "isSigningAuthority": true
+      }
+    ],
+    "primaryName": "Agglo-Bouw Voorbeeld B.V."
+  },
+  "blockStatus": [
+    { "blockID": "principalscontacts_L2_v1", "status": "ok", "reason": null },
+    { "blockID": "baseinfo_L1_v1", "status": "ok", "reason": null }
+  ]
+}
