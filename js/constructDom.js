@@ -78,6 +78,7 @@ function getDBsDocFrag(oDBs) {
    if(dataAvailability.blockIDs['companyinfo']) { ciDataAvailability(org, dataAvailability) }
    if(dataAvailability.blockIDs['hierarchyconnections']) { hcDataAvailability(org, dataAvailability) }
    if(dataAvailability.blockIDs['principalscontacts']) { pcDataAvailability(org, dataAvailability) }
+   if(dataAvailability.blockIDs['financialstrengthinsight']) { fsDataAvailability(org, dataAvailability) }
 
    //Log the data availability
    console.log('\nAvailable data');
@@ -118,6 +119,7 @@ function getDBsDocFrag(oDBs) {
    if(dataAvailability.blockIDs['companyinfo']) { createCiSections(org, dataAvailability, retDocFrag) }
    if(dataAvailability.blockIDs['hierarchyconnections']) { createHcSections(org, dataAvailability, retDocFrag) }
    if(dataAvailability.blockIDs['principalscontacts']) { createPcSections(org, dataAvailability, retDocFrag) }
+   if(dataAvailability.blockIDs['financialstrengthinsight']) { createFsSections(org, dataAvailability, retDocFrag) }
 
    return retDocFrag;
 }

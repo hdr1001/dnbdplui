@@ -81,7 +81,7 @@ function ciDataAvailability(org, dataAvailability) {
    }
 }
 
-//DOM code to convert the Comapany Information data in a JavaScript
+//DOM code to convert the Company Information data in a JavaScript
 //object so it can be displayed in sections on a regular HTML page
 function createCiSections(org, dataAvailability, retDocFrag) {
    let tbl, tbody;
