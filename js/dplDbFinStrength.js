@@ -27,20 +27,20 @@ function fsDataAvailability(org, dataAvailability) {
    dataAvailability.dnbAssessment = org.dnbAssessment && !bObjIsEmpty(org.dnbAssessment);
 
    if(dataAvailability.dnbAssessment) {
+      dataAvailability.financialCondition = org.dnbAssessment.financialCondition && 
+                                                !bObjIsEmpty(org.dnbAssessment.financialCondition);
+
+      dataAvailability.historyRating = org.dnbAssessment.historyRating && 
+                                                !bObjIsEmpty(org.dnbAssessment.historyRating);
+
+      dataAvailability.standardRating = org.dnbAssessment.standardRating && 
+                                                !bObjIsEmpty(org.dnbAssessment.standardRating)
+         
       dataAvailability.failureScore = org.dnbAssessment.failureScore && 
                                           !bObjIsEmpty(org.dnbAssessment.failureScore);
 
       dataAvailability.delinquencyScore = org.dnbAssessment.delinquencyScore && 
                                              !bObjIsEmpty(org.dnbAssessment.delinquencyScore);
-
-      dataAvailability.historyRating = org.dnbAssessment.historyRating && 
-                                          !bObjIsEmpty(org.dnbAssessment.historyRating);
-
-      dataAvailability.standardRating = org.dnbAssessment.standardRating && 
-                                             !bObjIsEmpty(org.dnbAssessment.standardRating)
-
-      dataAvailability.financialCondition = org.dnbAssessment.financialCondition && 
-                                                !bObjIsEmpty(org.dnbAssessment.financialCondition);
    }
 }
 
@@ -49,25 +49,92 @@ function fsDataAvailability(org, dataAvailability) {
 function createFsSections(org, dataAvailability, retDocFrag) {
    let tbl, tbody;
 
-   if(dataAvailability.standardRating && org.dnbAssessment.standardRating.rating) {
-      console.log('Section \"D&B standard rating\" will be created');
+   function createScoreSection(score, scoreTbl, docFrag) {
+      tbody = scoreTbl.appendChild(document.createElement('tbody'));
 
-      tbl = getBasicDBsTbl('D&B standard rating');
-      tbody = tbl.appendChild(document.createElement('tbody'));
-
-      addBasicDBsTblRow(tbody, 'D&B Rating', org.dnbAssessment.standardRating.rating);
-      if(org.dnbAssessment.standardRating.scoreDate) {
-         addBasicDBsTblRow(tbody, 'Score date', org.dnbAssessment.standardRating.scoreDate)
+      addBasicDBsTblRow(tbody, 'Class score', score.classScore);
+      if(score.classScoreDescription) {
+         addBasicDBsTblRow(tbody, 'Description', score.classScoreDescription);
       }
-      if(dataAvailability.failureScore && org.dnbAssessment.failureScore.scoreModel
-            && org.dnbAssessment.failureScore.scoreModel.description) {
-
-         addBasicDBsTblRow(tbody, 'Score model', org.dnbAssessment.failureScore.scoreModel.description)
+      if(score.scoreDate) {
+         addBasicDBsTblRow(tbody, 'Score date', score.scoreDate);
+      }
+      if(score.scoreModel && score.scoreModel.description) {
+         addBasicDBsTblRow(tbody, 'Model', score.scoreModel.description);
       }
 
-      retDocFrag.appendChild(tbl);
+      docFrag.appendChild(scoreTbl);
    }
-   else {
-      console.log('No data available for section \"D&B standard rating\", it will not be created');
+
+   if(dataAvailability.dnbAssessment) {
+      let ratingTbody;
+   
+      //Overall financial condition & history section
+      if(dataAvailability.financialCondition && org.dnbAssessment.financialCondition.description) {
+         console.log('Section \"Financial condition\" will be created');
+   
+         tbl = getBasicDBsTbl('Financial condition');
+         tbody = tbl.appendChild(document.createElement('tbody'));
+   
+         addBasicDBsTblRow(tbody, 'Overall condition', org.dnbAssessment.financialCondition.description);
+
+         if(dataAvailability.historyRating && org.dnbAssessment.historyRating.description) {
+            addBasicDBsTblRow(tbody, 'History', org.dnbAssessment.historyRating.description)
+         }
+
+         retDocFrag.appendChild(tbl);
+      }
+      else {
+         console.log('No data available for section \"Financial condition\", it will not be created');
+      }
+
+      //D&B rating
+      if(dataAvailability.standardRating && org.dnbAssessment.standardRating.rating) {
+         console.log('Section \"D&B standard rating\" will be created');
+   
+         tbl = getBasicDBsTbl('D&B standard rating');
+         ratingTbody = tbl.appendChild(document.createElement('tbody'));
+   
+         addBasicDBsTblRow(ratingTbody, 'D&B Rating', org.dnbAssessment.standardRating.rating);
+         if(org.dnbAssessment.standardRating.scoreDate) {
+            addBasicDBsTblRow(ratingTbody, 'Score date', org.dnbAssessment.standardRating.scoreDate)
+         }
+
+         retDocFrag.appendChild(tbl);
+      }
+      else {
+         console.log('No data available for section \"D&B standard rating\", it will not be created');
+      }
+
+      //D&B failure score
+      if(dataAvailability.failureScore && org.dnbAssessment.failureScore.classScore) {
+         console.log('Section \"D&B failure score\" will be created');
+
+         tbl = getBasicDBsTbl('D&B failure score');
+
+         createScoreSection(org.dnbAssessment.failureScore, tbl, retDocFrag)
+      }
+      else {
+         //If no failure score section is available add the model to the rating section
+         if(ratingTbody && dataAvailability.failureScore &&
+               org.dnbAssessment.failureScore.scoreModel.description) {
+
+            addBasicDBsTblRow(ratingTbody, 'Model', org.dnbAssessment.failureScore.scoreModel.description)
+         }
+
+         console.log('No data available for section \"D&B failure score\", it will not be created');
+      }
+
+      //D&B delinquency score
+      if(dataAvailability.delinquencyScore && org.dnbAssessment.delinquencyScore.classScore) {
+         console.log('Section \"D&B delinquency score\" will be created');
+
+         tbl = getBasicDBsTbl('D&B delinquency score');
+
+         createScoreSection(org.dnbAssessment.delinquencyScore, tbl, retDocFrag)
+      }
+      else {
+         console.log('No data available for section \"D&B delinquencyScore score\", it will not be created');
+      }
    }
 }
