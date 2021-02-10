@@ -26,6 +26,12 @@
 function fsDataAvailability(org, dataAvailability) {
    dataAvailability.dnbAssessment = org.dnbAssessment && !bObjIsEmpty(org.dnbAssessment);
 
+   if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) {
+      dataAvailability.isDeterioratingBusiness = typeof org.isDeterioratingBusiness === 'boolean';
+
+      dataAvailability.isHighRiskBusiness = typeof org.isHighRiskBusiness === 'boolean';
+   }
+
    if(dataAvailability.dnbAssessment) {
       dataAvailability.financialCondition = org.dnbAssessment.financialCondition && 
                                                 !bObjIsEmpty(org.dnbAssessment.financialCondition);
@@ -41,6 +47,16 @@ function fsDataAvailability(org, dataAvailability) {
 
       dataAvailability.delinquencyScore = org.dnbAssessment.delinquencyScore && 
                                              !bObjIsEmpty(org.dnbAssessment.delinquencyScore);
+
+      if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) {
+         dataAvailability.creditLimitRecommendation = org.dnbAssessment.creditLimitRecommendation && 
+                                                         !bObjIsEmpty(org.dnbAssessment.creditLimitRecommendation);
+
+         dataAvailability.hasSevereNegativeEvents = typeof org.dnbAssessment.hasSevereNegativeEvents === 'boolean';
+
+         dataAvailability.emergingMarketMediationScore = org.dnbAssessment.emergingMarketMediationScore && 
+                                                            !bObjIsEmpty(org.dnbAssessment.emergingMarketMediationScore);
+      }
    }
 }
 
