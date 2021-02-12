@@ -26,7 +26,7 @@
 function fsDataAvailability(org, dataAvailability) {
    dataAvailability.dnbAssessment = org.dnbAssessment && !bObjIsEmpty(org.dnbAssessment);
 
-   if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) {
+   if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) { //Level 2
       dataAvailability.isDeterioratingBusiness = typeof org.isDeterioratingBusiness === 'boolean';
 
       dataAvailability.isHighRiskBusiness = typeof org.isHighRiskBusiness === 'boolean';
@@ -48,7 +48,7 @@ function fsDataAvailability(org, dataAvailability) {
       dataAvailability.delinquencyScore = org.dnbAssessment.delinquencyScore && 
                                              !bObjIsEmpty(org.dnbAssessment.delinquencyScore);
 
-      if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) {
+      if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) { //Level 2
          dataAvailability.creditLimitRecommendation = org.dnbAssessment.creditLimitRecommendation && 
                                                          !bObjIsEmpty(org.dnbAssessment.creditLimitRecommendation);
 
@@ -65,92 +65,196 @@ function fsDataAvailability(org, dataAvailability) {
 function createFsSections(org, dataAvailability, retDocFrag) {
    let tbl, tbody;
 
-   function createScoreSection(score, scoreTbl, docFrag) {
-      tbody = scoreTbl.appendChild(document.createElement('tbody'));
+   function createScoreSection(score, scoreTblBody, docFrag) {
+      if(score.classScore || score.nationalPercentile) {
+         if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) { //Level 2
+            if(score.nationalPercentile) {
+               addBasicDBsTblRow(tbody, 'Percentile score', score.nationalPercentile)
+            }
 
-      addBasicDBsTblRow(tbody, 'Class score', score.classScore);
-      if(score.classScoreDescription) {
-         addBasicDBsTblRow(tbody, 'Description', score.classScoreDescription);
-      }
-      if(score.scoreDate) {
-         addBasicDBsTblRow(tbody, 'Score date', score.scoreDate);
-      }
-      if(score.scoreModel && score.scoreModel.description) {
-         addBasicDBsTblRow(tbody, 'Model', score.scoreModel.description);
-      }
+            if(score.scoreOverrideReasons && score.scoreOverrideReasons.length > 0) {
+               addBasicDBsTblRow(tbody, 'Override reason(s)', 
+                     score.scoreOverrideReasons.map(reason => reason.description))
+            }
+         }
 
-      docFrag.appendChild(scoreTbl);
+         //Level 1
+         if(score.classScore) {
+            addBasicDBsTblRow(scoreTblBody, 'Class score', score.classScore)
+         }
+         if(score.classScoreDescription) {
+            addBasicDBsTblRow(scoreTblBody, 'Description', score.classScoreDescription)
+         }
+         if(score.scoreDate) {
+            addBasicDBsTblRow(scoreTblBody, 'Score date', score.scoreDate)
+         }
+         if(score.scoreModel && score.scoreModel.description) {
+            addBasicDBsTblRow(scoreTblBody, 'Model', score.scoreModel.description)
+         }
+      }
    }
 
    if(dataAvailability.dnbAssessment) {
-      let ratingTbody;
-   
       //Overall financial condition & history section
-      if(dataAvailability.financialCondition && org.dnbAssessment.financialCondition.description) {
+      if(['financialCondition', 'historyRating', 'hasSevereNegativeEvents', 'isHighRiskBusiness',
+            'isDeterioratingBusiness'].some(elem => dataAvailability[elem])) {
          console.log('Section \"Financial condition\" will be created');
-   
+
          tbl = getBasicDBsTbl('Financial condition');
          tbody = tbl.appendChild(document.createElement('tbody'));
-   
-         addBasicDBsTblRow(tbody, 'Overall condition', org.dnbAssessment.financialCondition.description);
 
+         if(dataAvailability.financialCondition && org.dnbAssessment.financialCondition.description) {
+            addBasicDBsTblRow(tbody, 'Overall condition', org.dnbAssessment.financialCondition.description);
+         }
          if(dataAvailability.historyRating && org.dnbAssessment.historyRating.description) {
             addBasicDBsTblRow(tbody, 'History', org.dnbAssessment.historyRating.description)
          }
 
-         retDocFrag.appendChild(tbl);
+         if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) { //Level 2
+            if(dataAvailability.hasSevereNegativeEvents && org.dnbAssessment.hasSevereNegativeEvents) {
+               addBasicDBsTblRow(tbody, 'Severe negative events', 'Yes')
+            }
+            if(dataAvailability.isHighRiskBusiness && org.isHighRiskBusiness) {
+               addBasicDBsTblRow(tbody, 'High risk business', 'Yes')
+            }
+            if(dataAvailability.isDeterioratingBusiness && org.isDeterioratingBusiness) {
+               addBasicDBsTblRow(tbody, 'Is deteriorating', 'Yes')
+            }
+         }
+
+         if(tbody.childElementCount > 0) { 
+            retDocFrag.appendChild(tbl)
+         }
+         else {
+            console.log('No meaningful data available for section \"Financial condition\", it will not be created');
+         }
       }
       else {
          console.log('No data available for section \"Financial condition\", it will not be created');
       }
 
-      //D&B rating
-      if(dataAvailability.standardRating && org.dnbAssessment.standardRating.rating) {
+      //D&B standard rating
+      if(dataAvailability.standardRating) {
          console.log('Section \"D&B standard rating\" will be created');
    
          tbl = getBasicDBsTbl('D&B standard rating');
-         ratingTbody = tbl.appendChild(document.createElement('tbody'));
+         tbody = tbl.appendChild(document.createElement('tbody'));
    
-         addBasicDBsTblRow(ratingTbody, 'D&B Rating', org.dnbAssessment.standardRating.rating);
+         if(org.dnbAssessment.standardRating.rating && !(org.dnbAssessment.standardRating.financialStrength &&
+                  org.dnbAssessment.standardRating.riskSegment)) {
+            addBasicDBsTblRow(tbody, 'D&B Rating', org.dnbAssessment.standardRating.rating)
+         }
+         if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) { //Level 2
+            if(org.dnbAssessment.standardRating.financialStrength) {
+               addBasicDBsTblRow(tbody, 'Financial strength', org.dnbAssessment.standardRating.financialStrength)
+            }
+            if(org.dnbAssessment.standardRating.riskSegment) {
+               addBasicDBsTblRow(tbody, 'Risk segment', org.dnbAssessment.standardRating.riskSegment)
+            }
+            if(dataAvailability.creditLimitRecommendation) {
+               const maxRecCredit = org.dnbAssessment.creditLimitRecommendation;
+
+               if(maxRecCredit.maximumRecommendedLimit && maxRecCredit.maximumRecommendedLimit.value) {
+                  oCurrOpts.currency =  maxRecCredit.maximumRecommendedLimit.currency;
+
+                  const intlNumFormat = new Intl.NumberFormat('en-us', oCurrOpts);
+      
+                  addBasicDBsTblRow(tbody, 'Max rec credit limit',
+                        intlNumFormat.format(maxRecCredit.maximumRecommendedLimit.value));
+
+                  if(maxRecCredit.assessmentDate && org.dnbAssessment.standardRating.scoreDate &&
+                           (maxRecCredit.assessmentDate !== org.dnbAssessment.standardRating.scoreDate)) {
+
+                     addBasicDBsTblRow(tbody, 'Credit limit score date', maxRecCredit.assessmentDate)
+                  }
+               }
+            }
+            if(org.dnbAssessment.standardRating.ratingReason && org.dnbAssessment.standardRating.ratingReason.length > 0) {
+               addBasicDBsTblRow(tbody, 'Rating reason(s)', 
+                     org.dnbAssessment.standardRating.ratingReason.map(reason => reason.description))
+            }
+            if(org.dnbAssessment.standardRating.ratingOverrideReasons && 
+                     org.dnbAssessment.standardRating.ratingOverrideReasons.length > 0) {
+
+               addBasicDBsTblRow(tbody, 'Override reason(s)', 
+                     org.dnbAssessment.standardRating.ratingOverrideReasons.map(reason => reason.description))
+            }
+         }
          if(org.dnbAssessment.standardRating.scoreDate) {
-            addBasicDBsTblRow(ratingTbody, 'Score date', org.dnbAssessment.standardRating.scoreDate)
+            addBasicDBsTblRow(tbody, 'Score date', org.dnbAssessment.standardRating.scoreDate)
          }
 
-         retDocFrag.appendChild(tbl);
+         if(tbody.childElementCount > 0) {
+            retDocFrag.appendChild(tbl)
+         }
+         else {
+            console.log('No meaningful data available for section \"D&B standard rating\", it will not be created');
+         }
       }
       else {
          console.log('No data available for section \"D&B standard rating\", it will not be created');
       }
 
       //D&B failure score
-      if(dataAvailability.failureScore && org.dnbAssessment.failureScore.classScore) {
+      if(dataAvailability.failureScore) {
          console.log('Section \"D&B failure score\" will be created');
 
          tbl = getBasicDBsTbl('D&B failure score');
+         tbody = tbl.appendChild(document.createElement('tbody'));
 
-         createScoreSection(org.dnbAssessment.failureScore, tbl, retDocFrag)
+         createScoreSection(org.dnbAssessment.failureScore, tbody, retDocFrag)
+
+         if(tbody.childElementCount > 0) {
+            retDocFrag.appendChild(tbl)
+         }
+         else {
+            console.log('No meaningful data available for section \"D&B failure score\", it will not be created');
+         }
       }
       else {
-         //If no failure score section is available add the model to the rating section
-         if(ratingTbody && dataAvailability.failureScore &&
-               org.dnbAssessment.failureScore.scoreModel.description) {
-
-            addBasicDBsTblRow(ratingTbody, 'Model', org.dnbAssessment.failureScore.scoreModel.description)
-         }
-
          console.log('No data available for section \"D&B failure score\", it will not be created');
       }
 
       //D&B delinquency score
-      if(dataAvailability.delinquencyScore && org.dnbAssessment.delinquencyScore.classScore) {
+      if(dataAvailability.delinquencyScore) {
          console.log('Section \"D&B delinquency score\" will be created');
 
          tbl = getBasicDBsTbl('D&B delinquency score');
+         tbody = tbl.appendChild(document.createElement('tbody'));
 
-         createScoreSection(org.dnbAssessment.delinquencyScore, tbl, retDocFrag)
+         createScoreSection(org.dnbAssessment.delinquencyScore, tbody, retDocFrag)
+
+         if(tbody.childElementCount > 0) {
+            retDocFrag.appendChild(tbl)
+         }
+         else {
+            console.log('No meaningful data available for section \"D&B delinquencyScore score\", it will not be created');
+         }
       }
       else {
          console.log('No data available for section \"D&B delinquencyScore score\", it will not be created');
+      }
+
+      //EMMA Score
+      if(dataAvailability.blockIDs.financialstrengthinsight.level === 2) { //Level 2
+         if(dataAvailability.emergingMarketMediationScore) {
+            console.log('Section \"D&B emerging market score\" will be created');
+
+            tbl = getBasicDBsTbl('D&B emerging market score');
+            tbody = tbl.appendChild(document.createElement('tbody'));
+   
+            createScoreSection(org.dnbAssessment.emergingMarketMediationScore, tbody, retDocFrag)
+   
+            if(tbody.childElementCount > 0) {
+               retDocFrag.appendChild(tbl)
+            }
+            else {
+               console.log('No meaningful data available for section \"D&B emerging market score\", it will not be created');
+            }
+         }
+         else {
+            console.log('No data available for section \"D&B emerging market score\", it will not be created');
+         }
       }
    }
 }
