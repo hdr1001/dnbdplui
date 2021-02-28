@@ -1,0 +1,69 @@
+{
+  "transactionDetail": {
+    "transactionID": "rrt-0cba0815aed77662f-c-eu-5614-71638183-25",
+    "transactionTimestamp": "2021-02-25T08:00:33.171Z",
+    "inLanguage": "en-US"
+  },
+  "inquiryDetail": {
+    "duns": "407809623",
+    "blockIDs": ["eventfilings_L1_v1"],
+    "tradeUp": "hq"
+  },
+  "organization": {
+    "countryISOAlpha2Code": "NL",
+    "duns": "407809623",
+    "hasCompanyMoved": null,
+    "financingEvents": {
+      "hasFinancingEvents": true,
+      "hasLetterOfAgreement": true,
+      "hasLetterOfLiability": false,
+      "hasOpenFinancingEvents": true,
+      "hasOpenLetterOfLiability": false,
+      "hasOpenSecuredFilings": false,
+      "hasRemovedLetterOfLiability": false,
+      "hasSecuredFilings": false
+    },
+    "significantEvents": {
+      "hasSignificantEvents": false,
+      "hasOperationalEvents": false,
+      "hasDisastrousEvents": false,
+      "hasBurglaryOccured": null,
+      "hasFireOccurred": null,
+      "hasBusinessDiscontinued": null,
+      "hasNameChange": null,
+      "hasPartnerChange": null,
+      "hasCEOChange": null,
+      "hasControlChange": null
+    },
+    "legalEvents": {
+      "hasBankruptcy": false,
+      "hasClaims": false,
+      "hasCriminalProceedings": false,
+      "hasDebarments": null,
+      "hasFinancialEmbarrassment": false,
+      "hasInsolvency": false,
+      "hasJudgments": false,
+      "hasLegalEvents": false,
+      "hasLiens": false,
+      "hasLiquidation": false,
+      "hasOpenBankruptcy": false,
+      "hasOpenClaims": false,
+      "hasOpenCriminalProceedings": false,
+      "hasOpenDebarments": null,
+      "hasOpenFinancialEmbarrassment": false,
+      "hasOpenJudgments": false,
+      "hasOpenLegalEvents": false,
+      "hasOpenLiens": false,
+      "hasOpenSuits": false,
+      "hasOtherLegalEvents": false,
+      "hasSuits": false,
+      "hasSuspensionOfPayments": false
+    },
+    "primaryName": "Agglo-Bouw Voorbeeld B.V.",
+    "awards": {}
+  },
+  "blockStatus": [
+    { "blockID": "eventfilings_L1_v1", "status": "ok", "reason": null },
+    { "blockID": "baseinfo_L1_v1", "status": "ok", "reason": null }
+  ]
+}

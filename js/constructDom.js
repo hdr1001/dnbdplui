@@ -80,6 +80,7 @@ function getDBsDocFrag(oDBs) {
    if(dataAvailability.blockIDs['principalscontacts']) { pcDataAvailability(org, dataAvailability) }
    if(dataAvailability.blockIDs['financialstrengthinsight']) { fsDataAvailability(org, dataAvailability) }
    if(dataAvailability.blockIDs['paymentinsight']) { piDataAvailability(org, dataAvailability) }
+   if(dataAvailability.blockIDs['eventfilings']) { feDataAvailability(org, dataAvailability) }
 
    //Log the data availability
    console.log('\nAvailable data');
@@ -122,6 +123,7 @@ function getDBsDocFrag(oDBs) {
    if(dataAvailability.blockIDs['principalscontacts']) { createPcSections(org, dataAvailability, retDocFrag) }
    if(dataAvailability.blockIDs['financialstrengthinsight']) { createFsSections(org, dataAvailability, retDocFrag) }
    if(dataAvailability.blockIDs['paymentinsight']) { createPiSections(org, dataAvailability, retDocFrag) }
+   if(dataAvailability.blockIDs['eventfilings']) { createFeSections(org, dataAvailability, retDocFrag) }
 
    return retDocFrag;
 }

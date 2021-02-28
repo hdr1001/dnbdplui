@@ -31,6 +31,15 @@ function bObjIsEmpty(obj) {
    return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
+//Capitalize the 1st letter of a string
+function capitalize1st(sIn) {
+   if (typeof sIn !== 'string' || sIn.length === 0) {
+      return ''
+   }
+
+   return sIn.charAt(0).toUpperCase() + sIn.slice(1);
+ }
+
 //Create a table for displaying basic data block data
 function getBasicDBsTbl(title) {
    const tbl = document.createElement('table');
