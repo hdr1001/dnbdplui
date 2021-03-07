@@ -48,18 +48,20 @@ table.dnbDplDBsSection tbody tr th {
    text-align: left;
    font-weight: normal;
    font-style: italic;
-   padding-left: 5px;
+   padding-left: 8px;
 }
 
 table.dnbDplDBsSection tbody tr td {
    padding: 4px 10px;
 }
 
-span.btnPlusMinus {
+.btnPlusMinus {
    float: right;
    background-color: #009ECE;
    color: #fff;
+   border: none;
+   border-radius: 5px;
    font-weight: bold;
-   width: 22px;
-   text-align: center;
+   width: 30px;
+   height: 24px;
 }

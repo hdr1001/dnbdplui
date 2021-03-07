@@ -122,7 +122,7 @@ function createFeSections(org, dataAvailability, retDocFrag) {
       }
       else {
          if(evnts['has' + capitalize1st(evntCat) + 'Events'] === null) {
-            console.log('Header key has' + capitalize1st(evntCat) + 'Events has   a value of null');
+            console.log('Header key has' + capitalize1st(evntCat) + 'Events has a value of null');
          }
          else {
             console.log('Header key has' + capitalize1st(evntCat) + 'Events is not available');
@@ -142,23 +142,22 @@ function createFeSections(org, dataAvailability, retDocFrag) {
          let th = tr.childNodes[0];
 
          if(th && th.tagName.toLowerCase() === 'th') {
-            const span = th.appendChild(document.createElement('span'));
+            const btn = th.appendChild(document.createElement('button'));
 
-            span.classList.add('btnPlusMinus', evntCat);
+            btn.classList.add('btnPlusMinus', evntCat);
 
-            const txtSign = span.appendChild(document.createTextNode('+'));
-            span.style.cssFloat = 'right';
+            btn.textContent = '+';
 
             //Click event handler for the plus/minus button 
-            span.addEventListener('click', event => {
-               if(txtSign.nodeValue === '+') {
+            btn.addEventListener('click', event => {
+               if(btn.textContent === '+') {
                   tbody.querySelectorAll('tr.' + evntCat).forEach(filgEvntsRow => {
                      filgEvntsRow.style.display = 'table-row';
                   });
 
-                  txtSign.nodeValue = '-';
+                  btn.textContent = '-';
                }
-               else {
+               else { // - clicked
                   tbody.querySelectorAll('tr.' + evntCat).forEach(filgEvntsRow => {
                      if(filgEvntsRow.classList.contains('header')) {
                         filgEvntsRow.style.display = 'table-row';
@@ -168,7 +167,7 @@ function createFeSections(org, dataAvailability, retDocFrag) {
                      }
                   });
 
-                  txtSign.nodeValue = '+';
+                  btn.textContent = '+';
                }
             });
          }
@@ -198,10 +197,6 @@ function createFeSections(org, dataAvailability, retDocFrag) {
             console.log('Key ' + arrKeys[i].key + ' not available');
          }
       }
-/*
-      //Add an onChange eventhandler to the select control
-      selectActType.addEventListener('change', event => {
-      }); */
    }
 
    //Add high level corporate hierarchy information section to the page
