@@ -197,7 +197,7 @@ function createCiSections(org, dataAvailability, retDocFrag) {
       //Add the individual industry codes on table rows
       arrIndustryCodes.forEach(oIndsCode => {
          tr = tbody.appendChild(document.createElement('tr'));
-         tr.setAttribute('class', 'industryCodeRow ' + oIndsCode.typeDnBCode);
+         tr.classList.add('industryCodeRow', oIndsCode.typeDnBCode)
 
          td = tr.appendChild(document.createElement('td'));
          td.appendChild(document.createTextNode(oIndsCode.code));

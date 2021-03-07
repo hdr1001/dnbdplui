@@ -30,6 +30,67 @@ function booleToYesOrNo(boole) {
    return boole ? 'Yes' : 'No';
 }
 
+//Get the relevant keys associated with a specific event category
+function getArrFilgEvntsKeys(evntCat) {
+   let retArr = [];
+
+   switch(evntCat) {
+      case 'significant':
+         retArr = [
+            {key: 'hasBusinessDiscontinued', title: 'Business discontinued'},
+            {key: 'hasDisastrousEvents', title: 'Has disastrous events'},
+            {key: 'hasFireOccurred', title: 'Has fire occured'},
+            {key: 'hasBurglaryOccured', title: 'Has burglary occured'},
+            {key: 'hasOperationalEvents', title: 'Has operational events'},
+            {key: 'hasControlChange', title: 'Has control change'},
+            {key: 'hasPartnerChange', title: 'Has partner change'},
+            {key: 'hasCEOChange', title: 'Has CEO change'},
+            {key: 'hasNameChange', title: 'Has name change'}
+         ];
+         break;
+      case 'legal':
+         retArr = [
+            {key: 'hasBankruptcy', title: 'Has bankruptcy'},
+            {key: 'hasOpenBankruptcy', title: 'Has open bankruptcy'},
+            {key: 'hasInsolvency', title: 'Has insolvency'},
+            {key: 'hasLiquidation', title: 'Has liquidation'},
+            {key: 'hasSuspensionOfPayments', title: 'Has suspension of payments'},
+            {key: 'hasCriminalProceedings', title: 'Has criminal proceedings'},
+            {key: 'hasOpenCriminalProceedings', title: 'Has open criminal proceedings'},
+            {key: 'hasJudgments', title: 'Has judgments'},
+            {key: 'hasOpenJudgments', title: 'Has open judgments'},
+            {key: 'hasOtherLegalEvents', title: 'Has other legal events'},
+            {key: 'hasOpenLegalEvents', title: 'Has open legal events'},
+            {key: 'hasSuits', title: 'Has suits'},
+            {key: 'hasOpenSuits', title: 'Has open suits'},
+            {key: 'hasFinancialEmbarrassment', title: 'Has financial embarrassment'},
+            {key: 'hasOpenFinancialEmbarrassment', title: 'Has open financial embarrassment'},
+            {key: 'hasDebarments', title: 'Has debarments'},
+            {key: 'hasOpenDebarments', title: 'Has open debarments'},
+            {key: 'hasLiens', title: 'Has liens'},
+            {key: 'hasOpenLiens', title: 'Has open liens'},
+            {key: 'hasClaims', title: 'Has claims'},
+            {key: 'hasOpenClaims', title: 'Has open claims'}
+         ];
+         break;
+      case 'financing':
+         retArr = [
+            {key: 'hasSecuredFilings', title: 'Has secured filings'},
+            {key: 'hasOpenSecuredFilings', title: 'Has open secured filings'},
+            {key: 'hasOpenFinancingEvents', title: 'Has open financing events'},
+            {key: 'hasLetterOfAgreement', title: 'Has letter of agreement'},
+            {key: 'hasLetterOfLiability', title: 'Has letter of liability'},
+            {key: 'hasOpenLetterOfLiability', title: 'Has open letter of liability'},
+            {key: 'hasRemovedLetterOfLiability', title: 'Has removed letter of liability'}
+         ];
+         break;
+      default:
+         console.log('Invalid event category specified');
+   }
+
+   return retArr;
+}
+
 //Check for the availability of important properties in the
 //Filing & Events Data Block
 function feDataAvailability(org, dataAvailability) {
@@ -55,78 +116,92 @@ function createFeSections(org, dataAvailability, retDocFrag) {
 
       const hasEvnts = evnts['has' + capitalize1st(evntCat) + 'Events'];
 
-      addBasicDBsTblRow(tbody, 'Has ' + evntCat + ' events', booleToYesOrNo(hasEvnts));
-      let arrKeys;
-      
-      switch(evntCat) {
-         case 'significant':
-            arrKeys = [
-               {key: 'hasBusinessDiscontinued', title: 'Business discontinued'},
-               {key: 'hasDisastrousEvents', title: 'Has disastrous events'},
-               {key: 'hasFireOccurred', title: 'Has fire occured'},
-               {key: 'hasBurglaryOccured', title: 'Has burglary occured'},
-               {key: 'hasOperationalEvents', title: 'Has operational events'},
-               {key: 'hasControlChange', title: 'Has control change'},
-               {key: 'hasPartnerChange', title: 'Has partner change'},
-               {key: 'hasCEOChange', title: 'Has CEO change'},
-               {key: 'hasNameChange', title: 'Has name change'}
-            ];
-            break;
-         case 'legal':
-            arrKeys = [
-               {key: 'hasBankruptcy', title: 'Has bankruptcy'},
-               {key: 'hasOpenBankruptcy', title: 'Has open bankruptcy'},
-               {key: 'hasInsolvency', title: 'Has insolvency'},
-               {key: 'hasLiquidation', title: 'Has liquidation'},
-               {key: 'hasSuspensionOfPayments', title: 'Has suspension of payments'},
-               {key: 'hasCriminalProceedings', title: 'Has criminal proceedings'},
-               {key: 'hasOpenCriminalProceedings', title: 'Has open criminal proceedings'},
-               {key: 'hasJudgments', title: 'Has judgments'},
-               {key: 'hasOpenJudgments', title: 'Has open judgments'},
-               {key: 'hasOtherLegalEvents', title: 'Has other legal events'},
-               {key: 'hasOpenLegalEvents', title: 'Has open legal events'},
-               {key: 'hasSuits', title: 'Has suits'},
-               {key: 'hasOpenSuits', title: 'Has open suits'},
-               {key: 'hasFinancialEmbarrassment', title: 'Has financial embarrassment'},
-               {key: 'hasOpenFinancialEmbarrassment', title: 'Has open financial embarrassment'},
-               {key: 'hasDebarments', title: 'Has debarments'},
-               {key: 'hasOpenDebarments', title: 'Has open debarments'},
-               {key: 'hasLiens', title: 'Has liens'},
-               {key: 'hasOpenLiens', title: 'Has open liens'},
-               {key: 'hasClaims', title: 'Has claims'},
-               {key: 'hasOpenClaims', title: 'Has open claims'}
-            ];
-            break;
-         case 'financing':
-            arrKeys = [
-               {key: 'hasSecuredFilings', title: 'Has secured filings'},
-               {key: 'hasOpenSecuredFilings', title: 'Has open secured filings'},
-               {key: 'hasOpenFinancingEvents', title: 'Has open financing events'},
-               {key: 'hasLetterOfAgreement', title: 'Has letter of agreement'},
-               {key: 'hasLetterOfLiability', title: 'Has letter of liability'},
-               {key: 'hasOpenLetterOfLiability', title: 'Has open letter of liability'},
-               {key: 'hasRemovedLetterOfLiability', title: 'Has removed letter of liability'}
-            ];
-            break;
-         default:
-            console.log('Invalid event category specified');
-            return;
+      //Report whether the has...Events property is available
+      if(hasEvnts || hasEvnts === false) {
+         console.log('Header key has' + capitalize1st(evntCat) + 'Events is available');
+      }
+      else {
+         if(evnts['has' + capitalize1st(evntCat) + 'Events'] === null) {
+            console.log('Header key has' + capitalize1st(evntCat) + 'Events has   a value of null');
+         }
+         else {
+            console.log('Header key has' + capitalize1st(evntCat) + 'Events is not available');
+         }
       }
 
+      //Add a row for the has...Events property
+      let tr = addBasicDBsTblRow(tbody, 'Has ' + evntCat + ' events', booleToYesOrNo(hasEvnts));
+
+      //Add a plus/minus button to the row created
+      if(tr) { 
+         tr.classList.add('filgEvnts', evntCat, 'header');
+
+         tr.style.display = 'table-row';
+
+         //Add the plus/minus button to the table header element
+         let th = tr.childNodes[0];
+
+         if(th && th.tagName.toLowerCase() === 'th') {
+            const span = th.appendChild(document.createElement('span'));
+
+            span.classList.add('btnPlusMinus', evntCat);
+
+            const txtSign = span.appendChild(document.createTextNode('+'));
+            span.style.cssFloat = 'right';
+
+            //Click event handler for the plus/minus button 
+            span.addEventListener('click', event => {
+               if(txtSign.nodeValue === '+') {
+                  tbody.querySelectorAll('tr.' + evntCat).forEach(filgEvntsRow => {
+                     filgEvntsRow.style.display = 'table-row';
+                  });
+
+                  txtSign.nodeValue = '-';
+               }
+               else {
+                  tbody.querySelectorAll('tr.' + evntCat).forEach(filgEvntsRow => {
+                     if(filgEvntsRow.classList.contains('header')) {
+                        filgEvntsRow.style.display = 'table-row';
+                     }
+                     else {
+                        filgEvntsRow.style.display = 'none';
+                     }
+                  });
+
+                  txtSign.nodeValue = '+';
+               }
+            });
+         }
+      }
+
+      //Get the relevant keys associated with a specific event category
+      let arrKeys = getArrFilgEvntsKeys(evntCat);
+      
+      //Get the keys actually available on the data block
       const arrAvailableKeys = Object.keys(evnts).filter(sKey => evnts[sKey] !== null);
 
       let i, idx;
 
-      for(i = 0; i < arrKeys.length; i++) {
+      for(i = 0; i < arrKeys.length; i++) { //Loop through all possibly available keys
+
+         //Check if a specific key is actually available
          idx = arrAvailableKeys.findIndex(aKey => aKey === arrKeys[i].key);
 
-         if(idx !== -1) {
-            addBasicDBsTblRow(tbody, arrKeys[i].title, booleToYesOrNo(evnts[arrKeys[i].key]))
+         if(idx !== -1) { // if available ...
+            tr = addBasicDBsTblRow(tbody, arrKeys[i].title, booleToYesOrNo(evnts[arrKeys[i].key]));
+            if(tr) {
+               tr.classList.add('filgEvnts', evntCat, 'row');
+               tr.style.display = 'none'; //Hide row by default
+            }
          }
-         else {
+         else { // key not available ...
             console.log('Key ' + arrKeys[i].key + ' not available');
          }
       }
+/*
+      //Add an onChange eventhandler to the select control
+      selectActType.addEventListener('change', event => {
+      }); */
    }
 
    //Add high level corporate hierarchy information section to the page

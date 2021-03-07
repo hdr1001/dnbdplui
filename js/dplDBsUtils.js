@@ -43,7 +43,7 @@ function capitalize1st(sIn) {
 //Create a table for displaying basic data block data
 function getBasicDBsTbl(title) {
    const tbl = document.createElement('table');
-   tbl.setAttribute('class', 'dnbDplDBsSection')
+   tbl.classList.add('dnbDplDBsSection');
 
    const tblCapt = tbl.appendChild(document.createElement('caption'));
    tblCapt.appendChild(document.createTextNode(title));
@@ -58,12 +58,16 @@ function addBasicDBsTblRow(tbody, rowLabel, rowContent) {
 
    //Skip if no content available or empty array
    if(!rowContent || (bContentIsArray && rowContent.length === 0)) {
-      console.log('No content available for ' + rowLabel); return;
+      console.log('No content available for ' + rowLabel);
+      return null;
    }
 
-   let tr = tbody.appendChild(document.createElement('tr'));
+   const trRet = tbody.appendChild(document.createElement('tr'));
 
-   let td, th = tr.appendChild(document.createElement('th'));
+   let tr = trRet;
+   const th = tr.appendChild(document.createElement('th'));
+   let td;
+
    if(bLabelIsArray) {
       rowLabel.forEach((lbl, idx) => {
          th.appendChild(document.createTextNode(lbl));
@@ -96,7 +100,9 @@ function addBasicDBsTblRow(tbody, rowLabel, rowContent) {
       td.appendChild(document.createTextNode(rowContent ? rowContent : ''));
    }
 
-   tr.setAttribute('class', 'bottomRow');
+   tr.classList.add('bottomRow');
+
+   return trRet;
 }
 
 //Address to object conversion

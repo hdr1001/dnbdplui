@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                if(divDBsContainer) {
                   //The data block sections will be wrapped in a container
                   const divDnbDplDBs = document.createElement('div');
-                  divDnbDplDBs.setAttribute('class', 'dnbDplDBs');
+                  divDnbDplDBs.classList.add('dnbDplDBs');
 
                   //Create the DOM code for the JSON data
                   const docFrag = getDBsDocFrag(oDBs);
