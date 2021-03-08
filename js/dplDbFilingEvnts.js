@@ -84,6 +84,18 @@ function getArrFilgEvntsKeys(evntCat) {
             {key: 'hasRemovedLetterOfLiability', title: 'Has removed letter of liability'}
          ];
          break;
+      case 'awards':
+         retArr = [
+            {key: 'hasContracts', title: 'Has contracts'},
+            {key: 'hasOpenContracts', title: 'Has open contracts'},
+            {key: 'hasGrants', title: 'Has grants'},
+            {key: 'hasOpenGrants', title: 'Has open grants'},
+            {key: 'hasLoans', title: 'Has loans'},
+            {key: 'hasOpenLoans', title: 'Has open loans'},
+            {key: 'hasDebts', title: 'Has debts'},
+            {key: 'hasOpenDebts', title: 'Has open debts'}
+         ];
+         break;
       default:
          console.log('Invalid event category specified');
    }
@@ -112,25 +124,21 @@ function createFeSections(org, dataAvailability, retDocFrag) {
 
    //List event entries for significant, legal and financing categories
    function listEvents(evntCat) {
-      const evnts = org[evntCat + 'Events'];
+      let evnts, hasEvnts, tr;
 
-      const hasEvnts = evnts['has' + capitalize1st(evntCat) + 'Events'];
+      //Add a table row for the has...Events property
+      if(evntCat === 'awards') {
+         evnts = org[evntCat];
+         hasEvnts = null;
 
-      //Report whether the has...Events property is available
-      if(hasEvnts || hasEvnts === false) {
-         console.log('Header key has' + capitalize1st(evntCat) + 'Events is available');
+         tr = addBasicDBsTblRow(tbody, 'Awards', ' ');
       }
       else {
-         if(evnts['has' + capitalize1st(evntCat) + 'Events'] === null) {
-            console.log('Header key has' + capitalize1st(evntCat) + 'Events has a value of null');
-         }
-         else {
-            console.log('Header key has' + capitalize1st(evntCat) + 'Events is not available');
-         }
-      }
+         evnts = org[evntCat + 'Events'];
+         hasEvnts = evnts['has' + capitalize1st(evntCat) + 'Events'];
 
-      //Add a row for the has...Events property
-      let tr = addBasicDBsTblRow(tbody, 'Has ' + evntCat + ' events', booleToYesOrNo(hasEvnts));
+         tr = addBasicDBsTblRow(tbody, 'Has ' + evntCat + ' events', booleToYesOrNo(hasEvnts));
+      }
 
       //Add a plus/minus button to the row created
       if(tr) { 
@@ -212,12 +220,8 @@ function createFeSections(org, dataAvailability, retDocFrag) {
       if(dataAvailability.significantEvents) { listEvents('significant') }
       if(dataAvailability.legalEvents) { listEvents('legal') }
       if(dataAvailability.financingEvents) { listEvents('financing') }
+      if(dataAvailability.awards) { listEvents('awards') }
 
-/*
-      if(dataAvailability.awards) {
-         addBasicDBsTblRow(tbody, 'Company has moved', dataAvailability.hasCompanyMoved)
-      }
-*/
       retDocFrag.appendChild(tbl);
    }
    else {
