@@ -96,6 +96,12 @@ function getArrFilgEvntsKeys(evntCat) {
             {key: 'hasOpenDebts', title: 'Has open debts'}
          ];
          break;
+      case 'exclusions':
+         retArr = [
+            {key: 'hasActiveExclusions', title: 'Has active exclusions'},
+            {key: 'hasInactiveExclusions', title: 'Has inactive exclusions'}
+         ];
+         break;
       default:
          console.log('Invalid event category specified');
    }
@@ -115,6 +121,8 @@ function feDataAvailability(org, dataAvailability) {
    dataAvailability.financingEvents = org.financingEvents && !bObjIsEmpty(org.financingEvents);
 
    dataAvailability.awards = org.awards && !bObjIsEmpty(org.awards);
+
+   dataAvailability.exclusions = org.exclusions && !bObjIsEmpty(org.exclusions);
 }
 
 //DOM code to convert the Filing & Events data in a JavaScript
@@ -127,11 +135,11 @@ function createFeSections(org, dataAvailability, retDocFrag) {
       let evnts, hasEvnts, tr;
 
       //Add a table row for the has...Events property
-      if(evntCat === 'awards') {
+      if(evntCat === 'awards' || evntCat === 'exclusions') {
          evnts = org[evntCat];
          hasEvnts = null;
 
-         tr = addBasicDBsTblRow(tbody, 'Awards', ' ');
+         tr = addBasicDBsTblRow(tbody, capitalize1st(evntCat), ' ');
       }
       else {
          evnts = org[evntCat + 'Events'];
@@ -221,6 +229,7 @@ function createFeSections(org, dataAvailability, retDocFrag) {
       if(dataAvailability.legalEvents) { listEvents('legal') }
       if(dataAvailability.financingEvents) { listEvents('financing') }
       if(dataAvailability.awards) { listEvents('awards') }
+      if(dataAvailability.exclusions) { listEvents('exclusions') }
 
       retDocFrag.appendChild(tbl);
    }

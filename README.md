@@ -7,3 +7,4 @@ Currently the project supports the following Data Blocks;
 - Hierarchies & Connections (@ level [1](http://bit.ly/3pwLQqG "Level 1"))
 - Financial Strength Insights (@ level [1](http://bit.ly/2Nb3ZfB "Level 1") & [2](http://bit.ly/3jEOlFd "Level 2"))
 - Payment Insights (@ level [1](http://bit.ly/3d9giUm "Level 1"))
+- Filings & Events (@ level [1](http://bit.ly/3v9VEdC "Level 1"))

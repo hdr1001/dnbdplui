@@ -57,6 +57,7 @@ table.dnbDplDBsSection tbody tr td {
 
 .btnPlusMinus {
    float: right;
+   margin: 2px 0;
    background-color: #009ECE;
    color: #fff;
    border: none;
