@@ -1,4 +1,6 @@
 # dnbdplui
+
+➡️ This repository is no longer maintained! Check https://github.com/hdr1001/api_hub_rpr_v4 for (React & Material UI based) replacement code. ⬅️
 Implementation of a (basic) UI for D&amp;B's Direct+ Data Blocks
 
 Currently the project supports the following Data Blocks;
